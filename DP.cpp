@@ -344,6 +344,88 @@ int solve(vector<int>v)
     return ans;
 }
 
+//buy sell stock atmost 2 transaction
+
+int solve(vector<int>v)
+{
+    int n=v.size();
+    vector<int>dp(n,0);
+    int mn=v[0];
+    for(int i=1;i<n;i++)
+    {
+        dp[i]=max(0,v[i]-mn);
+        mn=min(mn,v[i]);
+    }
+    int ans=dp[n-1];
+    int mx=v[n-1];
+    for(int i=n-2;i>=0;i--)
+    {
+         mx=max(mx,v[i]);
+        ans=max(ans,dp[i]+mx-v[i]));
+       
+    }
+    return ans;
+}
+
+
+//buy and sell at most B transaction
+
+int solve(vector<int>v,int k)    //brute force
+{
+    int n=v.size();
+    vector<vector<int>>dp(k+1,vector<int>(n,0));
+    
+    
+    for(int i=1;i<=k;i++)          
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(j==0)
+            continue;
+            
+            int val=dp[i][j-1];
+            for(int k=0;k<j;k++)
+            {
+                val=max(val,dp[i-1][k]+v[j]-v[k]);    dp[i-1][k]-v[k]  + v[j]
+            }
+            dp[i][j]=val;
+        }
+    }
+    
+    return dp[k][n-1];
+    
+    
+}
+//optimize
+
+int solve(vector<int>v,int k)    //brute force
+{
+    
+    if(k>v.size()/2)
+    {
+        //infinte transaction
+    }
+    int n=v.size();
+    vector<vector<int>>dp(k+1,vector<int>(n,0));
+    
+    
+    for(int i=1;i<=k;i++)          
+    {
+        int val=dp[i-1][0];
+        for(int j=0;j<n;j++)
+        {
+            if(j==0)
+            continue;
+            
+            val=max(val,dp[i-1][j-1]-v[j-1]);
+            dp[i][j]=max(dp[i][j-1],val+v[j]);
+        }
+    }
+    return dp[k][n-1];
+}
+
+//stocks with transaction fee
+
 
 int main() {
 	
