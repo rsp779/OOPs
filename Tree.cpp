@@ -257,25 +257,26 @@ void path(TreeNode* root,int k ,vector<int>&ans,vector<int>&fans)
     ans.pop();
 }
 
-//Recover Binary Tree
-void recover(TreeNode* root,TreeNode* pare,TreeNode* fir,TreeNode* sec,TreeNode* thi)
+//Recover Binary Tree   //VIMP
+void inorder(TreeNode* A,TreeNode* &f,TreeNode* &s,TreeNode* &t,TreeNode* &prev)
 {
-    if(root==NULL)
-    return;
+    if(A==NULL)
+    return ;
     
-    recover(root->left,root,fir,sec,thi);
-   
-    if(pare->val>root->val)
+    inorder(A->left,f,s,t,prev);
+
+    if(prev!=NULL && prev->val>A->val)
     {
-        if(sec==NULL)
+        if(s==NULL)
         {
-            fir=root;
-            sec=pare;
+            f=prev;
+            s=A;
         }
-        else thi=root;
+        else t=A;
     }
-   
-     recover(root->right,root,fir,sec,thi);
+    prev=A;
+    inorder(A->right,f,s,t,prev);
+
 }
 
 int main() {
