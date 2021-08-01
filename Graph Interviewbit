@@ -1,0 +1,228 @@
+#include <iostream>
+using namespace std;
+
+//Snake Ladder Problem  //10*10 //be careful about x and y
+
+int snakesandladder(vector<vector<int>>board)
+{
+    int n=board.size();
+    
+    vector<int>v={1,2,3,4,5,6};
+    
+    vector<int>vis(101,false);
+    
+    queue<int>q;
+    int steps=0;
+    while(!q.empty())
+    {
+        int n=q.size();
+        steps++;
+        while(n--)
+        {
+            int val=q.front();
+            q.pop();
+            
+            vis[x]=true;
+            
+            for(int i=0;i<6;i++)
+            {
+                int cur=val+v[i];
+                
+                if(vis[cur])
+                continue;
+                
+                vis[cur]=true;
+                
+                int x=(cur-1)/10;
+                int y=(cur-1)%10;
+                int res=cur;
+                for(int i=0;i<snakes.size();i++)
+                if(cur==snakes[i][0])  //54--->17
+                {
+                    res=cur[i][1];
+                }
+                
+                for(int i=0;i<ladder.size();i++)
+                {
+                    if(cur==ladder[i][0])   // 2--> 5
+                    {
+                        res=ladder[i][1];
+                    }
+                }
+                if(res==100)
+                return steps;
+                q.push(res);
+            }
+        }
+    }
+    return -1;
+}
+//Valid path (to reach from point (x,y)-->(a,b) such that we dont touch any cicle
+struct point{
+    int x;
+    int y;
+};
+bool ispos(int x,int y,int a,int b,vector<vector<int>>circle,int r)
+{
+    int xp[8]={1,1,1,0,0,-1,-1,-1};
+    int yp[8]={1,0,-1,1,-1,-1,1,0};
+    queue<point>q;
+    
+    for(int i=0;i<circle.size();i++)
+    {
+        double dis=pow(circle[i][0]-x,2)+pow(circle[i][1],2)-pow(r,2);
+        
+        if(dis<=0)
+        return false;
+    }
+    
+    queue.push({x,y});
+    map<points,bool>mp;
+    
+    while(!q.empty())
+    {
+        int n=q.size();
+        
+        while(n--)
+        {
+            points pt=q.front();
+            q.pop();
+            
+            for(int i=0;i<8;i++)
+            {
+                int u=pt+xp[i];
+                int v=pt+yp[i];
+                
+                if(a==u && v==b)
+                return false;
+                
+                if(mp.find({u,v})!=mp.end())
+                continue;
+                
+                mp[{u,v}]=true;
+                
+                for(int j=0;j<circle.size();j++)
+                {
+                     if(u<0 || u>A || v<0 || v>B || vis[u][v]==true) //vis[][]can be taken as map
+                     continue;
+                     
+                    double dis=pow(circle[i][0]-u,2)+pow(circle[i][1],2)-pow(r,2);
+                    
+                    if(dis<=0)
+                    continue;
+                    
+                    q.push({u,v});
+                }
+            }
+            
+        }
+    }
+    return false;
+}
+
+//largest distance between nodes
+//first find the fathest node from the root node and then 
+//find the farthest node from the cur node..and that would be the answer
+ 
+int find(vector<int>v)  // v={-1,0,0,0,3} //root nodes are given
+{
+    unordered_map<int,vector<int>>mp;
+    int root=-1;
+    for(int i=0;i<v.size();i++)
+    {
+        if(v[i]!=-1)
+        {
+        mp[v[i]].push_back(i);
+        mp[i].push_back(v[i]);
+        }
+        else root=i;
+    }
+    
+    int fnode=-1; //farthest node
+    
+    queue<int>q;
+    q.push(root);
+    vis[root]=true;
+    vector<bool>vis(v.size()+1,false);
+    
+    while(!q.empty())
+    {
+        int n=q.size();
+        while(n--)
+        {
+            fnode=q.front();   //will store the farthest node that is the last node from the levels
+            int cur=q.front();
+            q.pop();
+            
+            
+            for(int x : mp[cur])
+            {
+                if(!vis[x])
+                q.push(x);
+                
+                vis[x]=true;
+            }
+        }
+    }
+    
+    for(int i=0;i<v.size();i++)
+    vis[i]=false;
+    
+    q.push(fnode);
+    vis[fnode]=true;
+    int len=0;
+    while(!q.empty())
+    {
+        int n=q.size();
+        len++;
+        while(n--)
+        {
+            int cur=q.front();
+            q.pop();
+            for(int x : mp[cur])
+            {
+                if(!vis[x])
+                q.push(x);
+                vis[x]=true;
+            }
+        }
+    }
+    return len-1;  //number of edges= number of nodes-1
+}
+
+//Search a word int 2D matrix
+bool search(vector<string>&v,int r,int c,int n,int m,string &str,int &cur)
+{
+    if(r<0 || c<0 || r>=n || c>=m || v[r][c]==str[cur])
+    return false;
+    
+    if(str[str.size()-1]==A[r][c])
+    return true;
+    
+    cu++;
+    
+    if(search(v,r+1,c,n,m,str,cur) || search(v,r,c+1,n,m,str,cur)
+    || search(v,r-1,c,n,m,str,cur) || search(v,r,c-1,n,m,str,cur))
+    return true;
+    
+    return false;
+}
+bool ispos(vector<string>&v,string str)
+{
+    bool flag=false;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(v[i][j]==str[0])
+            flag =flag || search(v,i,j,A.size(),A[0].size(),str,0);
+        }
+    }
+    return flag;
+}
+//
+
+int main() {
+	// your code goes here
+	return 0;
+}
