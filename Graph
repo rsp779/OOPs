@@ -1,0 +1,455 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+unordered_map<int,vector<int>> dbuildgraph(vector<vector<int>>v)
+{
+    unordered_map<int,vector<int>>mp;
+    for(int i=0;i<v.size();i++)
+    {
+        mp[v[i][0]].push_back(v[i][1]);
+    }
+    return mp;
+}
+
+unordered_map<int,vector<int>> unbuildgraph(vector<vector<int>>v)
+{
+    unordered_map<int,vector<int>>mp;
+    for(int i=0;i<v.size();i++)
+    {
+        mp[v[i][0]].push_back(v[i][1]);
+        mp[v[i][1]].push_back(v[i][0]);
+    }
+    return mp;
+}
+unordered_map<int,vector<pair<int,int>> wgraph(vector<vector<int>>v)   [1,2,5] , [4,6,8]
+{
+    unordered_map<int,vector<pair<int,int>> mp;
+    for(int i=0;i<v.size();i++)
+    {
+        mp[v[i][0]].push_back({v[i][1],v[i][2]});
+        mp[v[i][1]].push_back({v[i][0],v[i][2]});
+    }
+    return mp;
+}
+
+//general DFS
+void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis)
+{
+    vis[node]=true;
+    
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            dfs(x,mp,vis);
+        }
+    }
+}
+
+
+//Directed cylce detection
+bool iscycle(int node,unordered_map<int,vector<int>>&mp,vector<int>&vis)
+{
+    vis[node]=2;
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            if(iscycle(x,mp,vis))
+            return true;
+        }
+        else if(vis[x]==2)
+        return true;
+    }
+    vis[node]=1;
+    return false;
+}
+/* for(int i=1;i<=n;i++)
+{
+    if(!vis[i)
+    {
+        if(iscycle(i,mp,vis))
+        return true;
+    }
+}
+return false;*/
+
+
+
+//DFS undeirected graph
+
+bool iscycle(int node,unordered_map<int,vector<int>>&mp,vector<int>&vis)
+{
+    vis[node]=1;
+    
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            if(iscycle(x,mp,vis))
+            return true;
+        }
+        else if(x!=node && vis[x]==true)
+        return true;
+    }
+    return false;
+}
+
+//count number of components
+
+int noc()
+{
+    int count=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(!vis[i])
+        {
+            count++;
+            dfs(i,mp,vis);
+        }
+    }
+    return count;
+}
+ 
+//number of nodes in components 
+void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis,int &c)
+{
+    vis[node]=true;
+    c++;
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            dfs(x,mp,vis,c);
+        }
+    }
+}
+vector<int> compchild()
+{
+    vector<int>v;
+    for(int i=1;i<=n;i++)
+    {
+        int c=0;
+        if(!vis[i])
+        {
+            dfs(i,mp,vis,c);
+        }
+        v.push_back(c);
+    }
+    return v;
+}
+
+//Topo sort using dfs
+void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis,stack<int>&s)
+{
+    vis[node]=true;
+    
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            dfs(x,mp,vis);
+        }
+    }
+    s.push(node);
+}
+
+vector<int> topo()
+{
+    stack<int>s;
+    for(int i=1;i<=n;i++){
+        if(!vis[i])
+        {
+            dfs(i,mp,vis,s);
+        }
+    }
+    vector<int>ans;
+    while(s.empty()==false)
+   { ans.push_back(s.top());
+    s.pop();}
+   
+    return ans;
+}
+
+//kahns Algorithm
+
+vector<int>v kahn(vector<vector<int>>v)
+{
+    vector<int>indeg(n,0);
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int x : mp[i])
+        indeg[x]++;
+    }
+    queue<int>q;
+    vector<int>ans;
+    for(int i=1;i<=n;i++)
+    {
+        if(indeg[i]==0)
+        {
+        q.push(i);
+       
+        }
+    }
+    
+    while(!q.empty())
+    {
+        
+        int node=q.front();
+        q.pop();
+         ans.push_back(node);
+         
+        for(int x : mp[node])
+        {
+        indeg[x]--;
+        if(indeg[x]==0)
+        q.push(x);
+        }
+    }
+    
+    if(ans.size()==n)
+    return ans;
+}
+
+//Number of islands
+int x[4]={1,-1,0,0};
+int y[4]={0,0,1,-1};
+
+void numberofisland(vector<vector<int>>&v,int i,int j,int n,int m)
+{
+    if(i>0 || j>0 || i<n || j<m || vis[i][j]!=1)
+    return ;
+    
+    vis[i][j]=2;
+    
+    for(int i=0;i<4;i++)
+    numberofisland(v,i+x[i],j+y[i],n,m);
+}
+int numberofisland(vector<vector<int>>v)
+{
+    int n=v.size();
+    int m=v[0].size();
+    
+    int count=0;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            if(v[i][j]==1)
+            {
+               count++;
+               numberofisland(v,i,j,n,m);
+            }
+        }
+    }
+    return count;
+}
+
+//Bipartite graph
+
+bool nbpt(int node,unordered_map<int,vector<int>>&mp,vector<int>&vis,int col)
+{
+    vis[node]=col;
+    
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            if(nbpt(x,mp,vis,(-1)*col)
+            return true;
+        }
+        else if(vis[node]==vis[x])
+        return true;
+    }
+    return false;
+}
+
+//Kosaraju Algorithm for Strongly Connected components
+
+void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis,stack<int>&s)
+{
+    vis[node]=true;
+    
+    for(int x : mp[node])
+    {
+        if(!vis[x])
+        {
+            dfs(x,mp,vis);
+        }
+    }
+    s.push(node);
+}
+
+void dfs1(int node,unordered_map<int,vector<int>>&rev,vector<int>&vis)
+{
+    vis[node]=true;
+    
+    for(int x : rev[node])
+    {
+        if(!vis[x])
+        dfs1(x,rev,vis);
+    }
+}
+
+int scc(unordered_map<int,vector<int>>mp)
+{
+    unordered_map<int,vector<int>>rev;
+    for(int i=1;i<=n;i++)
+    {
+        for(int x : mp[i])
+        rev[x].push_back(i);
+    }
+    
+    stack<int>s;
+    vector<bool>vis(n,false);
+    
+    for(int i=1;i<=n;i++)
+    {
+        if(!vis[i])
+        {
+            dfs(i,mp,vis,s);
+        }
+    }
+    
+    for(int i=0;i<=n;i++)
+    vis[i]=false;
+    
+    int count=0;
+    while(!s.empty())
+    {
+        int node=s.top();
+        s.pop();
+        if(vis[node]==false)
+        {
+            dfs1(node,rev,vis);
+            count++;
+        }
+    }
+    return count;
+}
+
+//Dijisktra Algorithm
+
+vector<int>v Dijisktra(int source)
+{
+    vector<int>dis(n+1,INT_MAX);
+    
+    dis[source]=0;
+    
+    
+    priority_queue< pair<int,int>,vector< pair<int,int>>,greater< pair<int,int>>>pq;
+    
+    pq.push({0,source});
+    
+    while(!pq.empty())
+    {
+        int node=pq.top().second;
+        int dis=pq.top().first;
+        pq.pop();
+        
+        if(vis[node])
+        continue;
+        
+        dis[node]=dis;
+        vis[node]=true;
+        for(int x : mp[node])
+        {
+            if(!vis[x])
+            {
+                pq.push({dis+x.second,x});
+            }
+        }
+    }
+   return dis;
+}
+//belman ford Algorithm
+
+bool negativeedgecyclepresent ()
+{
+    
+    vector<int>v(n,INT_MAX));
+    
+    v[0]=0;
+    
+    for(int j=0;j<n;j++)
+        {
+            for(int x : mp[j])
+            v[x]=min(v[x],v[j]+x.second.second);
+        }
+    
+    vector<int>cur(n);
+    cur=v;
+         for(int j=0;j<n;j++)
+        {
+            for(int x : mp[j])
+            v[x]=min(v[x],v[j]+x.second.second);
+        }
+    
+    for(int i=0;i<n;i++)
+    {
+        if(v[i]!=cur[i])
+        return true;
+    }
+    return false;
+    
+}
+
+
+//flyod warshal
+
+void flyodwarshal ()
+{
+    
+    vector<vector<int>>dp(n,vector<int>(n,INT_MAX));
+    
+    for(int i=0;i<V;i++)
+    dp[i][i]=0;
+    
+    for(int k=0;k<V;k++)
+    {
+        for(int i=0;i<V;i++)
+        {
+            for(int j=0;j<V;j++)
+            {
+                if(dis[i][k]!=INT_MAX && dis[k][j]!=INT_MAX)
+                {
+                    dp[i][j]=min(dp[i][j],dp[i][k]+dp[k][j]);
+                }
+            }
+        }
+    }
+}
+
+//Prims Algorithm
+
+int prims()
+{
+    priority_queue< pair<int,int>,vector< pair<int,int>>,greater< pair<int,int>>>pq;
+    int ans=0;
+    
+    pq.push({0,1});
+    
+    while(!pq.empty())
+    {
+        int node=pq.top().second;
+        int dis=pq.top.first;
+        
+        if(vis[node])
+        continue;
+        
+        vis[node]=true;
+        ans+=dis;
+        
+        for(int x : mp[node])
+        {
+            if(!vis[x])
+            pq.push({x.second,x.first});
+        }
+    }
+    return ans;
+}
+//
+int main() {
+	return 0;
+}
