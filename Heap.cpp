@@ -259,6 +259,89 @@ ListNode* merge(vector<ListNode*>&v)
       return head->next;
 }
 
+//Median of stream of integers
+class Solution
+{
+    public:
+    //Function to insert heap.
+    priority_queue<int,vector<int>>xp;   //stores max of min elements
+    priority_queue<int,vector<int>,greater<int>>ip; //stores min of max elements
+    Solution() 
+    {
+        while(!xp.empty())
+        xp.pop();
+        
+        while(!ip.empty())
+        ip.pop();
+        
+    }
+    void insertHeap(int &x)
+    {
+        if(xp.empty() || xp.top()>x)
+        xp.push(x);
+        else ip.push(x);
+    }
+    
+    //Function to balance heaps.
+    void balanceHeaps()
+    {
+        if(xp.size()>ip.size()+1)
+        {
+            ip.push(xp.top());
+            xp.pop();
+        }
+        else if(xp.size()+1<ip.size())   //to maintain the size difference of <=1 so that we can divide the sorted array in 2 parts
+        {
+            xp.push(ip.top());
+            ip.pop();
+        }
+    }
+    
+    //Function to return Median.
+    double getMedian()
+    {
+        balanceHeaps();
+        if( xp.size()!=0 && xp.size()==ip.size())
+        {
+            return((xp.top()+ip.top())/2.0);
+        }
+        else {
+            if(xp.empty())
+            return(ip.top())*1.0;
+            else if(ip.empty())
+            return(xp.top())*1.0;
+            
+            else {
+              return ((xp.size()>ip.size()?xp.top():ip.top())*1.0);
+            }
+        }
+    }
+};
+
+//Minimum cost to connect ropes
+
+int cost(vector<int>v)
+{
+    priority_queue<int,vector<int>,greater<int>>pq;
+    for(int i=0;i<v.size();i++)
+    pq.push({v[i]});
+    int ans=0;
+    while(pq.size()!=1)
+    {
+       int a=pq.top();
+       pq.pop();
+       int b=pq.top();
+       pq.pop();
+       
+       ans+=a+b;
+       pq.push(a+b);
+       
+    }
+    return ans;
+}
+
+
+
 
 int main() {
 	// your code goes here
