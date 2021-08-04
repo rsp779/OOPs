@@ -337,9 +337,55 @@ int cost(vector<int>v)
        pq.push(a+b);
        
     }
-    return ans;
+    return pq.top();
 }
 
+//comvert Min Heap to Max Heap
+// ==> simple hepify with buildmaxheap
+
+//Minimum sum using the elements of the array
+
+string solve(int arr[], int n) {
+        sort(arr,arr+n);
+        
+        int i=0,j=1;
+        string s1="",s2="";
+        while(j<n)
+        {
+            s1.push_back(arr[i]+'0');
+            s2.push_back(arr[j]+'0');
+            
+            i=i+2;
+            j=j+2;
+        }
+        if(n%2!=0)
+           s1.push_back(arr[i]+'0');
+        
+        
+        string ans="";
+        int carry=0;
+        i=s1.size()-1,j=s2.size()-1;
+        
+        while(i>=0 || j>=0 || carry>0)
+        {
+            int sum=carry;
+            if(i>=0)
+            sum+=s1[i]-'0';
+            
+            if(j>=0)
+            sum+=s2[j]-'0';
+            
+            ans.push_back((sum%10)+'0');
+            carry=sum/10;
+            i--;j--;
+        }
+        reverse(ans.begin(),ans.end());
+        i=0;
+        while(i<ans.size()-1 && ans[i]=='0')
+        i++;
+        
+        return ans.substr(i);
+}
 
 
 
