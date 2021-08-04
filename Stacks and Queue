@@ -1,0 +1,604 @@
+#include <bits/stdc++.h>  
+using namespace std;
+
+//==>Stack
+
+class Stack{
+    public :
+    int stack[1001];
+    int top;
+    Stack()
+    {
+       top=-1;
+    }
+    
+    void insert(int x)
+    {
+        top++;
+        stack[top]=x;
+    }
+    int top()
+    {
+        if(top!=-1)
+        {
+            return stack[top];
+        }
+        return -1;
+    }
+    int pop()
+    {
+        if(top!=-1)
+        {
+            int x=stack[top];
+            top--;
+            return x;
+        }
+        return -1;
+    }
+};
+
+class queue{
+    int front,back;
+    int queue[1001];
+    
+    queue()
+    {
+        front=-1;
+        back=-1;
+    }
+    
+    void insert(int x)
+    {
+        if(front==-1)
+        front++;
+        
+        back++;
+        queue[back]=x;
+    }
+    int top()
+    {
+        if(front!=-1)
+        return queue[front];
+        
+        return -1;
+    }
+    int pop()
+    {
+        if(front!=-1 && front<=back)
+        {
+            int x=queue[front];
+            front++;
+            
+            return x;
+        }
+        return-1;
+    }
+};
+class ListNode{
+    public : 
+    
+    ListNode* back;
+    ListNode* forw;
+    int val;
+    
+    ListNode(int x)
+    {
+        val=x;
+        back=NULL;
+        forw=NULL;
+    }
+    
+};
+
+//find middle of stack in O(1)
+class Dll{
+    public : 
+    Dll* pre;
+    Dll* next;
+    int data;
+};
+
+class mystack()
+{
+    public :
+    Dll *head;
+    Dll *mid;
+    int count;
+    
+    mystack()
+    {
+        head=NULL;
+        mid=NULL;
+        count=0;
+    }
+};
+
+void push(mystack* obj,int x)
+{
+    Dll* temp=new Dll(x);
+    
+    if(obj.head==NULL)
+    {
+        obj.head=temp;
+    }
+    else {
+        obj.head->next=temp;
+        temp->prev=obj.head;
+        obj.head=temp;
+    }
+   obj.count+=1;
+    
+    if(mid==NULL)
+    {
+        mystack.mid=head;
+    }
+    else if(obj.count%2!=0)
+    {
+        mid=mid->next;
+    }
+}
+void pop(mystack* obj)
+{
+    if(head!=NULL)
+    {
+        ListNode* temp=obj.head->prev;
+        obj.head->prev=NULL;
+        int x=head->data;
+        temp->next=NULL;
+        free(head);
+        
+        obj.head=temp;
+        obj.count-=1;
+        
+        if(obj.count%2==0)
+        {
+            mid=mid->prev;
+        }
+        return x;
+    }
+    return -1;
+}
+int findMiddleElement(mystack* obj)
+{
+    if(obj.mid!=NULL)
+    return obj.mid->data;
+    
+    return -1;
+}
+void deletemiddleelement(mystack* obj)
+{
+    if(obj.count%2!=0)  //move towards left
+    {
+        ListNode* temp=obj.mid;
+        obj.mid=obj.mid->prev;
+        
+        obj.mid->next=temp->next;
+        temp->next->prev=obj.mid;
+        
+        free(temp);
+        
+    }
+    else {           //move mid to right
+        ListNode* temp=obj.mid;
+        obj.mid=obj.mid->next;
+        obj.mid->prev=temp->prev;
+        
+        temp->prev->next=obj.mid;
+        
+        free(temp);
+    }
+}
+//Implement Minstack
+
+class minstack()
+{
+    stack<int>s;
+    int cur_min;
+    
+    minstack()
+    {
+        while(!s.empty)
+        s.pop();
+        
+        cur_min=INT_MAX;
+    }
+    void push(int x)
+    {
+        int y=x;
+        if(cur_min>x)
+        {
+            cur_min=x;
+            y=2*cur_min-x;
+        }
+        s.push(y);
+    }
+    void pop()
+    {
+        int s_min=s.top();
+        
+        int x=s.top();
+        s.pop();
+        
+        if(cur_min>s.top())
+        {
+            s_min=2*cur_min-x;
+        }
+        cur_min=s_min;
+        return x;
+    }
+    int min_element()
+    {
+        if(s.empty()==true)
+        return -1;
+        
+        return cur_min;
+    }
+};
+
+//greater/smaaller
+vector<int> greater(vector<int>v)
+{
+    vector<int>ans;
+    stack<int>s;
+    
+    for(int i=0;i<v.size();i++)
+    {
+        if(s.empty())
+        {
+            ans.push_back(-1);
+        }
+        else{
+            while(!s.empty() && v[s.top()]>v[i])
+            s.pop();
+            
+            if(!s.empty())
+            ans.push_back(v[s.top()]);
+            else ans.push_back(-1);
+        }
+        s.push(i);
+    }
+    return ans;
+}
+
+//A square NxN matrix M[][] is used to represent people at the party such that if an element of row i and column j  is set to 1 it means ith person knows jth person. Here M[i][i] will always be 0.
+
+ int celebrity(vector<vector<int> >& M, int n) 
+    {
+        stack<int>s;
+        for(int i=0;i<n;i++)
+        {
+            s.push(i);
+        }
+        while(s.size()!=1)
+        {
+            int a=s.top();
+            s.pop();
+            int b=s.top();
+            s.pop();
+            
+            if(M[a][b]==1)
+            {
+                s.push(b);
+            }
+            else {
+                s.push(a);
+            }
+        }
+        int x=s.top();
+        int c1=0,c2=0;
+        for(int i=0;i<n;i++)
+        {
+            if(M[i][x])c2+=1;
+            if(M[x][i])c1+=1;
+        }
+        if(c2==n-1 && c1==0)
+        return x;
+        else return -1;
+}
+
+//Infix to postfix
+
+string solve(string str)
+{
+    string ans="";
+    
+    stack<char>s;
+    
+    unordered_map<char,int>mp;
+    mp['-']=0;
+    mp['+']=0;
+    mp['*']=1;
+    mp['/']=1;
+    
+    
+    for(int i=0;i<str.size();i++)
+    {
+        if(str[i]==')')
+        {
+            while(s.top()!='(')
+            {
+            ans.push_back(s.top());
+            s.pop();
+            }
+            s.pop();
+        }
+        else if(s.top()==']')
+         {
+            while(s.top()!='[')
+            {
+            ans.push_back(s.top());
+            s.pop();
+            }
+            s.pop();
+        }
+        else if(str[i]>='A' && str[i]<='Z')
+        ans.push_back(str[i]);
+        
+        else {
+            while(!s.empty() &&mp.find(s.top())!=mp.end() && mp[s.top()]>mp[v[i]])
+            {
+            ans.push_back(s.top());
+            s.pop();
+            }
+            s.push(v[i]);
+        }
+    }
+    return ans;
+}
+//infix ==> postfix
+int solve(string S)
+{
+   
+        stack<int>s;
+        for(int i=0;i<S.size();i++)
+        {
+            if(S[i]>='0' && S[i]<='9')
+            s.push((S[i]-'0'));
+            
+            else {
+                int a=s.top();
+                s.pop();
+                int b=s.top();
+                s.pop();
+                if(S[i]=='+')
+                s.push(a+b);
+                else if (S[i]=='-')
+                s.push(b-a);
+                else if(S[i]=='*')
+                s.push(a*b);
+                else s.push(b/a);
+            }
+        }
+        return s.top();
+}
+
+//Merge Interval
+bool static(vector<int>a,vector<int>b)
+{
+    if(a[1]==b[1])
+    return a[0]<b[0];
+    
+    return a[1]<b[1];
+}
+vector<vector<int>>mergeinterval(vector<vector<int>>interval)
+{
+    vector<vector<int>>ans;
+    sort(interval.begin9),interval.end(),sortby);
+    int i=1,j=0;
+    int n=interval.size();
+    vector<int>v(2,0);
+    
+    v[0]=interval[0][0];
+    
+    int maxend=interval[0][1];
+    
+    while(i<n)
+    {
+      maxend=max(maxend,interval[i-1][1]);
+      
+      if(interval[i][0]>interval[j][1])
+      {
+          j++;
+          
+          if(i==j)
+          {
+              v[1]=maxend;
+              ans.push_back(v);
+              
+              v[0]=interval[i][0];
+              i++;
+          }
+      }
+      else i++;
+    }
+    maxend=max(maxend,interval[n-1][1]);
+    v[1]=maxend;
+    ans.push_back(v);
+    return ans;
+}
+
+//Area of rectangle in histogram
+int areaofrec(vector<int>his)
+{
+ while (i < n)
+    {
+        // If this bar is higher than the bar on top 
+        // stack, push it to stack
+        if (s.empty() || hist[s.top()] <= hist[i])
+            s.push(i++);
+
+        // If this bar is lower than top of stack, 
+        // then calculate area of rectangle with stack 
+        // top as the smallest (or minimum height) bar. 
+        // 'i' is 'right index' for the top and element 
+        // before top in stack is 'left index'
+        else
+        {
+            tp = s.top();  // store the top index
+            s.pop();  // pop the top
+
+            // Calculate the area with hist[tp] stack 
+            // as smallest bar
+            area_with_top = hist[tp] * (s.empty() ? i : 
+                                   i - s.top() - 1);
+
+            // update max area, if needed
+            if (max_area < area_with_top)
+                max_area = area_with_top;
+        }
+    }
+
+    // Now pop the remaining bars from stack and calculate
+    // area with every popped bar as the smallest bar
+    while (s.empty() == false)
+    {
+        tp = s.top();
+        s.pop();
+        area_with_top = hist[tp] * (s.empty() ? i : 
+                                i - s.top() - 1);
+
+        if (max_area < area_with_top)
+            max_area = area_with_top;
+    }
+
+    return max_area;
+}
+//stack permutation
+bool stackpermutation(vector<int>a,vector<int>b)
+{
+    if(a.size()!=b.size())
+    return false;
+    
+    stack<int>s;
+    
+    int i=0,j=0;
+    int n=a.size();
+    while(i<n || j<n)
+    {
+        if(!s.empty() && j<n && s.top()==b[j])
+        {
+            s.pop();
+            j++;
+        }
+        else if(i<n)
+        {
+            s.push(a[i]);
+            i++;
+        }
+        else return false;
+    }
+    return (s.size()==0)?true:false;
+}
+
+
+//cicular queue
+struct circular{
+    public :
+    int rear,front;
+    int arr[101];
+    int n;
+    circular()
+    {
+        rear=-1;
+        front=-1;
+        n=101;
+    }
+    
+    void insert(int x)   //check for the base cases   //front==back ..... front=-1;
+    {
+        front=(front+1)%n;
+    }
+    
+    void remov()
+    {
+        rear=(rear+1)%n;
+    }
+}
+
+//Expression for redundant braces
+bool redundant(string str)
+{
+    stack<char>s;
+    for(int i=0;i<str.size();i++)
+    {
+       if(str[i]==')')
+       {
+           bool flag=true;
+           
+           while(s.top()!='(')
+           {
+               char x=s.top();
+               if(x==''......)
+               flag=false;
+               
+               s.pop();
+           }
+           if(flag)
+           return true;
+       }
+       else s.push[str[i]];
+    }
+    return false;
+}
+
+//LRU cache Implementation
+
+
+
+#include<list>
+list<int>lis;
+unordered_map<int,list<int> :: iterator>mplis;
+unordered_map<int,int>keylis;
+int c,cap;
+LRUCache::LRUCache(int capacity) {
+    c=0;
+    cap=capacity;
+    lis.clear();
+    mplis.clear();
+    keylis.clear();
+}
+void deletelis(int key)
+{
+    if(mplis.find(key)==mplis.end())
+    return;
+    lis.erase(mplis[key]);
+    keylis.erase(key);
+    mplis.erase(key);
+    c--;
+}
+void insertlis(int key,int val)
+{
+   // cout<<key<<" "<<val<<endl;
+    keylis[key]=val;
+    lis.push_front(key);
+    mplis[key]=lis.begin();
+    c++;
+}
+int LRUCache::get(int key) {
+    if(mplis.find(key)==mplis.end())
+    return -1;
+    int val=keylis[key];
+    deletelis(key);
+    insertlis(key,val);
+    return val;
+}
+ 
+void LRUCache::set(int key, int value) {
+        
+        if(mplis.find(key)!=mplis.end())
+        {
+           deletelis(key);
+            insertlis(key,value);
+            return;
+        }
+       if(cap==c) {
+            int x=lis.back();
+            deletelis(x);
+        }
+        insertlis(key,value);
+}
+
+int main() {
+	// your code goes here
+	return 0;
+}
