@@ -1,0 +1,224 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct ListNode{
+    
+    int val;
+    ListNode* next;
+    
+}
+
+ListNode* reverse(ListNode* head)
+{
+    if(!head || !head->next)
+    return head;
+    
+    ListNode* prev=head;
+    ListNode* cur=head->next;
+    
+    while(cur)
+    {
+        ListNode* temp=cur->next;
+        cur->next=prev;
+        prev=cur;
+        cur=temp;
+    }
+    return prev;
+}
+ListNode* reverse(ListNode* &head,ListNode* cur)
+{
+  if(cur->next==NULL)
+  {
+     head=cur;    //send by reference
+     return NULL;
+  }
+  
+  ListNode* temp=cur->next;
+  cur->next=reverse(head,temp);
+  
+  temp->next=cur;
+  return NULL;
+}
+  
+ //detect a cycle
+ ListNode* cycle(ListNode* head)
+ {
+     ListNode* slow=head,fast=head;
+     
+     do{
+         slow=slow->next;
+         fast=fast->next->next;
+     }while(fast && fast->next && fast!=slow);
+     
+     if(slow==fast)
+     {
+         fast=head;
+         while(fast!=slow)
+         {
+             fast=fast->next;
+             slow=slow->next;
+         }
+         return slow;
+     }
+     return NULL;
+}
+//remove duplicates unsorted link List 
+ListNode* removeduplicates(ListNode* head)
+{
+    unordered_map<int,int>mp;
+    ListNode* href=head;
+    mp[head->val]++;
+    while(head && head->next)
+    {
+        if(mp.find(head->next->val)!=mp.end())
+        {
+            head->next=head->next->next;
+        }
+        else {
+            mp[head->next->val]++;
+            head=head->next;
+        }
+    }
+    return href;
+}
+
+ListNode* addone(ListNode* head)
+{
+    ListNode* cur=head;
+    ListNode* last=NULL;
+    
+    while(cur->next!=NULL)
+    {
+        if(cur->val!=9)
+        {
+            last=cur;
+        }
+        cur=cur->next;
+    }
+    
+    if(cur->val!=9)
+    {
+        cur->val+=1;
+        return head;
+    }
+    if(last==NULL)  //9->9->9-{
+        {
+            last=new ListNode(0);
+            last->next=head;
+            cur=last;
+        }
+    last->val+=1;
+    
+    last=last->next;
+    while(last)
+    {
+        last->val=0;
+        last=last->next;
+    }
+    return head;
+}
+
+//Add two numbers represented by link ListNode
+ListNode* add2ll(ListNode* h1,ListNode* h2)
+{
+    stack<ListNode*> s1;
+    while(h1)
+    {
+        s1.push(h1);
+        h1=h1->next;
+    }
+    stack<ListNode*>s2;
+    while(h2)
+    {
+        s2.push(h2);
+        h2=h2->next;
+    }
+    
+    int carry=0;
+    ListNode* cur=NULL;
+    while(!s1.empty() && !s2.empty() && carry!=0)
+    {
+        int sum=carry;
+        
+        if(!s2.empty())
+        {
+            sum+=s2.top()->val;
+            s2.pop();
+        }
+        if(!s1.empty())
+        {
+            sum+=s1.top()->val;
+             cur=s1.top();
+            s1.pop();
+            cur->val=sum%10;
+        }
+        else {
+            ListNode* newnode=new ListNode(sum%10);
+            newnode->next=cur;
+            cur=newnode;
+        }
+        carry=sum/10;
+    }
+    return cur;
+}
+
+//Merge Sort of two link List
+
+void Merge(ListNode* A,ListNode* B)
+{
+  
+ 
+  ListNode* cur=new ListNode(-1);
+  ListNode* dummy=cur;
+  while(A!=NULL || B!=NULL)
+  {
+      if(A&&B)
+      {
+          if(A->val>B->val)
+          {
+              cur->next=B;
+              cur=B;
+              B=B->next;
+          }
+          else {
+              cur->next=A;
+              cur=A;
+              A=A->next;
+          }
+      }
+      else if (A && !B)
+      {
+          cur-next=A;
+          break;
+      }
+      else {
+          cur->next=B;
+          break;
+      }
+  }
+  return dummy->next;
+    
+}
+
+ListNode* mergesort(ListNode* head)
+{
+    if(head==NULL && head->next==NULL)
+    return head;
+    
+    ListNode* slow=head,fast=head->next;
+    
+    while(fast && fast->next)
+    {
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    fast=slow->next;
+    slow->next=NULL;
+    
+    mergesort(merge(head),merge(fast));
+}
+
+int main() {
+	// your code goes here
+	return 0;
+}
