@@ -386,7 +386,74 @@ string solve(int arr[], int n) {
         
         return ans.substr(i);
 }
+//Return first k maximum sum of 2 arrays
 
+vector<int>kmaxsum(vector<int>a,vector<int>b,int k)
+{
+    sort(a.begin(),a.end());
+    sort(b.begin(),b.end());
+    
+    priority_queue<pair<int,pair<int,int>,vector<pair<int,pair<int,int>>>>pq;
+    int n=a.size()-1;
+    int m=b.size()-1;
+    
+    pq.push({a[n][m],{n,m}});
+    vector<int>ans;
+    
+    vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
+
+    
+    while(ans.size()!=k)
+    {
+        pair<int,pair<int,int>p=pq.top();
+        pq.pop();
+        ans.push_back(p.first);
+        
+        int x=p.second.first;
+        int y=p.second.second;
+        
+        if(x>0 && dp[x-1][y]=-1)
+        {
+            pq.push({a[x-1]+b[y],{x-1,y}});
+            dp[x-1][y]=1;
+        }
+        if(y>0 && dp[x][y-1]=-1)
+        {
+            pq.push({a[x]+b[y-1],{x,y-1}});
+            dp[x][y-1]=1;
+        }
+    }
+    return ans;
+}
+
+//distict numbers in window
+vector<int> distictnumbers(vector<int>v,int B)
+{
+    vector<int>ans;
+    unordered_map<int,int>mp;
+    
+    for(int i=0;i<v.size();i++)
+    mp[v[i]]=0;
+    
+    int count=0;
+    
+    for(int i=0;i<v.size();i++)
+    {
+        mp[v[i]]++;
+        if(mp[v[i]]==1)
+        count++;
+        
+        if(i+1>=B)
+        {
+            ans.push_back(count);
+            mp[v[i+1-B]]--;
+            
+            if(mp[v[i+1-B]]==0)
+            count--;
+        }
+    }
+    return ans;
+}
 
 
 int main() {
