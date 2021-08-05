@@ -1,0 +1,183 @@
+#include <iostream>
+using namespace std;
+
+//Rain water trapped
+int rainwatertrapped(vector<int>v)
+{
+    if(v.size()<3)
+    return 0;
+    int n=v.size();
+    int i=1,j=n-1;
+    int lmax=v[0],rmax=v[n-2];
+    
+    int ans=0;
+    while(i<=j)
+    {
+        if(lmax<=rmax)
+        {
+            ans+=max(0,lmax-v[i]);
+            lmax=max(lmax,v[i]);
+            i++;
+        }
+        else {
+            ans+=max(0,rmax-v[j]);
+            rmax=max(rmax,v[j]);
+            j--;
+        }
+    }
+    return ans;
+}
+//sliding window maximum
+vector<int> swm(vector<int>v,int B)
+{
+    vector<int>ans;
+    int n=v.size();
+    deque<int>dq;
+    
+    for(int i=0;i<n;i++)
+    {
+        while(!dq.empty() && dq.front()>=i-B)
+        dq.pop_front();
+        
+        while(!dq.empty() && v[dq.back()]<v[i])
+        dq.pop_back();
+        
+        dq.push(i);
+        if(i+1>=B)
+        ans.push_back(v[dq.front()]);
+    }
+    return ans;
+}
+//first non repeating charecter in stream    ==> second way is to use doubly link list
+string FirstNonRepeating(string A){
+		    
+		    queue<char>q;
+		    unordered_map<char,int>mp;
+		    string ans="";
+		    
+		    for(int i=0;i<A.size();i++)
+		    {
+		        mp[A[i]]++;
+		        if(mp[A[i]]==1)
+		        q.push(A[i]);
+		        
+		        while(!q.empty() && mp[q.front()]!=1)
+		        {
+		            mp[q.front()]--;
+		            q.pop();
+		        }
+		        if(q.size()==0)
+		        ans.push_back('#');
+		        else ans.push_back(q.front());
+		    }
+		    return ans;
+		}
+
+//sum of minimum and maximum elements in subarray of size k 
+int solve(vector<int>v,int k)
+{
+    deque<int>mx;
+    deque<int>mi;
+    int ans=0;
+    for(int i=0;i<v.size();i++)
+    {
+        while(!mx.empty() && mx.front()>=k)
+        mx.pop_front();
+        
+        while(!mi.empty() && mi.front()>=k)
+        mi.pop_front();
+        
+        while(!mx.empty && v[mi.back()]>v[i])
+        mi.pop_back();
+        
+        while(!mi.empty() && v[mi.back()]<v[i])
+        mi.pop_back();
+        
+        if(i+1>=k)
+        {
+            ans+=v[mi.front()]+v[mx.front()];
+        }
+    }
+    return ans;
+}
+//check if all levels are anagram or not in a tree
+
+// ==> use map with level order
+
+
+//first negative integer in all B size subarray
+
+vector<int> swm(vector<int>v,int B)
+{
+    vector<int>ans;
+    int n=v.size();
+    deque<int>dq;
+    
+    for(int i=0;i<n;i++)
+    {
+        while(!dq.empty() && dq.front()>=i-B)
+        dq.pop_front();
+        
+        if(v[i]<0)
+        dq.push(i);
+        
+             if(i+1>=B )
+          {   
+        if(dq.size()!=0)      
+        ans.push_back(v[dq.front()]);
+        else ans.push_back(0);
+         }
+    }
+    return ans;
+}
+
+//0-1 matrix
+	vector<vector<int>>nearest(vector<vector<int>>grid)
+	{
+	    int n=grid.size();
+	    int m=grid[0].size();
+	    vector<vector<int>>dir={{1,0},{-1,0},{0,1},{0,-1}};
+	     vector<vector<int>>ans(n,vector<int>(m,0));
+	    vector<vector<int>>vis(n+1,vector<int>(m+1,0));
+	    
+	    queue<pair<int,int>>q;
+	    for(int i=0;i<grid.size();i++)
+	    {
+	        for(int j=0;j<grid[i].size();j++)
+	        {
+	            if(grid[i][j]==1)
+	            {
+	                vis[i][j]=1;
+	                
+	                q.push({i,j});
+	            }
+	            
+	        }
+	    }
+	    
+	    while(!q.empty())
+	    {
+	        pair<int,int> p=q.front();
+	        q.pop();
+	        int i=p.first;
+	        int j=p.second;
+	        for(int k=0;k<4;k++)
+	        {
+	            int x=p.first + dir[k][0];
+	            int y=p.second+ dir[k][1];
+	            
+	            if(x<0 || y<0 || x>=n || y>=m || vis[x][y])
+	            continue;
+	            
+	            ans[x][y]=ans[i][j]+1;
+	            vis[x][y]=1;
+	            q.push({x,y});
+	        }
+	    }
+	    return ans;
+	}
+
+int main() {
+	// your code goes here
+	return 0;
+}
