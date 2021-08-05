@@ -217,7 +217,93 @@ ListNode* mergesort(ListNode* head)
     
     mergesort(merge(head),merge(fast));
 }
+//ListNode Split Circular
+void split (ListNode* A,ListNode* &h1,ListNode* &h2)
+{
+    h1=A;
+    ListNode* x=A,*y=A,*z=A->next,temp=A;
+    while(z->next!=x && z!=temp)
+    {
+        z=z->next->next;
+        y=y->next->next;
+        x=x->next->next;
+    }
+    h2=x->next;
+    x->next=NULL;
+    if(z==temp)
+    {
+        y->next=NULL;
+    }
+    else z->next=NULL;
+}
 
+//palindome
+bool palindome(ListNode* A,ListNode* &in)
+{
+    if(A==NULL)
+    return true;
+    
+    if(palindome(A->next,in) && (in->val==A->val))
+    {
+        in=in->next;
+        return true;
+    }
+    else return false;
+    
+}
+
+//reverse a doubly link List
+struct dll{
+    int val;
+    dll* next;
+    dll* back;
+}
+dll* reverse(dll* head)
+{
+    dll* prev=head;
+    dll* cur=head->next;
+   
+    while(cur)
+    {
+        dll* temp=cur->next;
+        
+        prev->next=prev->back;
+        prev->back=cur;
+        
+        prev=cur;
+        cur=temp;
+    }
+    return prev;
+}
+//flatten a link List 
+Node *flatten(Node *root)
+{
+   Node *head=root;
+  
+   priority_queue< pair<int,Node*>,vector< pair<int,Node*>>,
+   greater< pair<int,Node*>>>pq;
+   
+  
+   while(head)
+   {
+       pq.push({head->data,head});
+       head=head->next;
+   }
+  Node *fhead=new Node(-1);
+  head=fhead;
+   while(!pq.empty())
+   {
+       pair<int,Node*>p=pq.top();
+       pq.pop();
+     //  cout<<p.first<<" "<<endl;
+       fhead->bottom=p.second;
+       fhead=p.second;
+       if(fhead->bottom)
+       pq.push({fhead->bottom->data,fhead->bottom});
+   }
+  
+   return head->bottom;
+}
 int main() {
 	// your code goes here
 	return 0;
