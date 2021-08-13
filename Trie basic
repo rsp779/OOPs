@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct trie{
+    char ch;
+    int we;
+    vector<trie*>v;
+    
+    trie(char p)
+    {
+        ch=p;
+        we=0;
+        for(int i=0;i<26;i++)
+        v.push_back(NULL);
+    }
+};
+
+trie* root;
+
+void insert(string str)
+{
+    trie* cur=root;
+    
+    int index=-1;
+    for(int i=0;i<str.length();i++)
+    {
+        index=str[i]-'a';
+        if(cur->v[index]==NULL)
+        {
+            trie* temp=new trie(str[i]);
+            cur->v[index]=temp;
+        }
+        cur=cur->v[index];
+    }
+    cur->we+=1;
+}
+int noofwordending(string str)
+{
+     trie* cur=root;
+    
+    for(int i=0;i<str.size();i++)
+    {
+        int index=str[i]-'a';
+        if(cur->v[index]==NULL)
+        return 0;
+        
+        cur=cur->v[index];
+    }
+    return cur->we;
+}
+bool search(string str)
+{
+    trie* cur=root;
+    
+    for(int i=0;i<str.size();i++)
+    {
+        int index=str[i]-'a';
+        if(cur->v[index]==NULL)
+        return false;
+        
+        cur=cur->v[index];
+    }
+    if(cur->we>0)
+    return true;
+    
+    return false;
+}
+
+void deleteword(string str)
+{
+    trie* cur=root;
+    int index=-1;
+    for(int i=0;i<str.size();i++)
+    {
+        index=str[i]-'a';
+        if(cur->v[index]==NULL)
+        return;
+        
+        cur=cur->v[index];
+    }
+    if(cur->we>0)  // deletes one occurence
+    cur->we-=1;
+}
+int main() {
+	// your code goes here
+     root=new trie('$');
+	
+ 	vector<string> z ={"rana" , "rana" , "pratap"};
+ 	for(int i=0;i<z.size();i++)
+ 	insert(z[i]);
+	
+	cout<<search("suraj")<<endl;
+	cout<<noofwordending("rana")<<endl;
+	deleteword("rana");  //deletes one occurence of the word
+	cout<<noofwordending("rana");
+	
+	return 0;
+}
