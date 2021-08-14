@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct trie{
     char ch;
     int we;
@@ -11,17 +9,14 @@ struct trie{
         we=0;
         for(int i=0;i<26;i++)
         v.push_back(NULL);
+        
     }
 };
-
-trie* root;
-
-void insert(string str)
+void insert(string str,trie* head)
 {
-    trie* cur=root;
-    
+    trie* cur=head;
     int index=-1;
-    for(int i=0;i<str.length();i++)
+    for(int i=0;i<str.size();i++)
     {
         index=str[i]-'a';
         if(cur->v[index]==NULL)
@@ -29,35 +24,35 @@ void insert(string str)
             trie* temp=new trie(str[i]);
             cur->v[index]=temp;
         }
-         cur->we+=1;   //this will increase prefix of every part by +1
         cur=cur->v[index];
+        cur->we+=1;
     }
-    cur->we+=1;
 }
-int noofwordending(string str)
+string search(string str,trie* head,int n)
 {
-     trie* cur=root;
-    
+    trie* cur=head;
+    int index=-1;
+    string ans="";
     for(int i=0;i<str.size();i++)
     {
-        int index=str[i]-'a';
-        if(cur->v[index]==NULL)
-        return 0;
+        index=str[i]-'a';
+        if(cur->v[index]->we==n)
+        {
+            ans.push_back(str[i]);
+        }
+        else break;
         
         cur=cur->v[index];
     }
-    return cur->we;
+    return ans;
 }
 
-int main() {
-	// your code goes here
-     root=new trie('$');
-	
- 	vector<string> z ={"abac","abaa","abab","aabb","aabc"};
- 	for(int i=0;i<z.size();i++)
- 	insert(z[i]);
+string Solution::longestCommonPrefix(vector<string> &A) {
+    trie* head=new trie('$');
     
-	cout<<noofwordending("ab")<<endl;
-	
-	return 0;
+    int max=0;
+    for(int i=0;i<A.size();i++)
+    insert(A[i],head);
+    
+    return search(A[0],head,A.size());
 }
