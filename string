@@ -1,0 +1,108 @@
+#include <iostream>
+using namespace std;
+
+//Count and Say
+string Solution::countAndSay(int A) {
+    if(A==1)
+    return "1";
+    string res="1";
+    A=A-1;
+    
+    while(A--)
+    {
+        string ans="";
+        int i=0;
+        res.push_back(' ');
+        for(int j=0;j<res.size();j++)
+        {
+            if(res[j]!=res[i])
+            {
+                int len=j-i;
+                ans.append(to_string(len));
+                ans.push_back(res[i]);
+                i=j;
+            }
+        }
+        res=ans;
+    }
+    return res;
+}
+
+//length of the longest word 
+string Solution::longestCommonPrefix(vector<string> &A) {
+    string ans="";
+    int l=0;
+    int h=A[0].size();
+    
+    while(l<=h)
+    {
+        int mid=h+(l-h)/2;
+        string x=A[0].substr(0,mid);
+        
+        int count=1;
+        for(int i=1;i<A.size();i++)
+        {
+            if(x==(A[i].substr(0,mid)))
+            count++;
+        }
+        if(count==A.size())
+        {
+            ans=x;
+            l=mid+1;
+        }
+        else h=mid-1;
+    }
+    return ans;
+}
+
+//Full KMP 
+int Solution::strStr(const string A, const string B) {
+    
+    int n=B.size();
+    int m=A.size();
+    
+    vector<int>dp(n,0);
+    int i=0,j=1;
+    while(j<n)
+    {
+        if(B[i]==B[j])
+        {
+            dp[j]=i+1;
+            i++;
+            j++;
+        }
+        else {
+            if(i==0)
+            j++;
+            else i=dp[i-1];
+        }
+    }
+    i=0,j=0;
+    while(i<m)
+    {
+        if(A[i]==B[j])
+        {
+            i++;
+            j++;
+        }
+        else {
+            if(j==0)
+            i++;
+            else j=dp[j-1];
+        }
+        if(j==n)
+        return i-j;
+        cout<<i<<" "<<j<<" "<<dp[j]<<endl;
+    }
+    return -1;
+}
+
+
+//
+
+
+
+int main() {
+	// your code goes here
+	return 0;
+}
