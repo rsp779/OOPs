@@ -21,3 +21,44 @@ public:
         
     }
 };
+
+//Minimum taps to open to water the garden 
+
+class Solution {
+public:
+    int minTaps(int n, vector<int>& ranges) {
+        
+      vector<int>dp(n+1,-1);
+        
+        for(int i=0;i<=n;i++)
+        {
+            int lef=max(0,i-ranges[i]);
+            int rig=min(n,i+ranges[i]);
+            dp[lef]=max(dp[lef],rig);
+        }
+       
+        int maxreach=0;
+        int jumps=1;
+        
+        int steps=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            maxreach=max(maxreach,dp[i]);
+            
+            if(maxreach>=n)
+                return jumps;
+            
+            steps--;
+            if(steps<=0)
+            {
+                steps=maxreach-i;
+                if(steps<=0)
+                    return -1;
+                jumps++;
+            }
+        }
+        return -1;
+        
+    }
+};
