@@ -1,0 +1,390 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//pick from both sides 
+int Solution::solve(vector<int> &A, int B) {
+  
+   int ans=INT_MIN;
+  
+     int sum=0;
+     for(int i=0;i<B;i++)
+     sum+=A[i];
+     
+     int j=A.size()-1;
+     
+     int i=B-1;
+     int n=A.size()-1;
+     int x=0;
+     while(i>=-1)
+     {
+         ans=max(ans,sum+x);
+         sum-=A[i];
+         i--;
+         x+=A[j];
+         j--;
+     }
+    return ans;
+}
+
+//Min steps in Infinite Grid 
+int Solution::coverPoints(vector<int> &A, vector<int> &B) {
+    
+    int ans=0;
+    int n=A.size();
+    for(int i=1;i<n;i++)
+    {
+       ans=ans+max(abs(A[i]-A[i-1]),abs(B[i]-B[i-1]));
+    }
+    return ans;
+}
+
+//Minimum lights to Activate 
+
+int Solution::solve(vector<int> &A, int B) {
+    int count=0;
+    int n=A.size();
+    bool flag=false;
+    for(int i=0;i<n;i++)
+    {
+            flag=false;
+            for(int j=min(n-1,i+B-1);j>=max(0,i-B+1);j--)
+            {
+                if(A[j]==1)
+                {
+                    count++;
+                    i=j+B-1;
+                   
+                    flag=true;
+                }
+            }
+            if(flag==false)
+            return -1;
+    }
+    return count;
+}
+
+//You need to find the maximum sum of triplet
+//( Ai + Aj + Ak ) such that 0 <= i < j < k < N and Ai < Aj < Ak.
+int Solution::solve(vector<int> &A) {
+   
+     int ans=-1;
+    int n=A.size();
+    vector<int>rig(n,-1);
+    
+    rig[n-1]=A[n-1];
+    
+    for(int i=n-2;i>=0;i--)
+    {
+        rig[i]=max(rig[i+1],A[i]); 
+    }
+    
+    set<int>s;
+    for(int i=0;i<n;i++)
+    {
+        s.insert(A[i]);
+        
+        if(rig[i]!=A[i])
+        {
+            auto itr=s.find(A[i]);
+            
+            if(itr!=s.begin())
+            {
+                --itr;
+                ans=max(ans,A[i]+*itr+rig[i]);
+            }
+        }
+    }
+   return ans;
+}
+
+
+//Add 1 to number 
+vector<int> Solution::plusOne(vector<int> &A) {
+   
+   int n=A.size();
+   
+    vector<int>ans;
+    int i=n-1;
+    int carry=1;
+    
+    
+    
+   
+    for(int i=n-1;i>=0;i--)
+    {
+        int sum=A[i]+carry;
+        ans.push_back(sum%10);
+        carry=sum/10;
+    }
+    
+    if(carry!=0)
+    ans.push_back(carry);
+    
+    
+    int j=ans.size()-1;
+    
+    while(ans[j]==0)
+    {
+        ans.pop_back();
+        j--;
+    }
+    
+    
+    
+    reverse(ans.begin(),ans.end());
+    return ans;
+   
+}
+// A[i]-A[j]| + |i-j|
+int Solution::maxArr(vector<int> &A) {
+    int n=A.size();
+    
+    int a=INT_MIN;
+    int b=INT_MIN;
+    int x=INT_MAX;
+    int y=INT_MAX;
+    
+    for(int i=0;i<n;i++)
+    {
+        a=max(a,A[i]+i);
+        b=max(b,A[i]-i);
+        x=min(x,A[i]+i);
+        y=min(y,A[i]-i);
+    }
+        
+    return max(a-x,b-y);
+}
+
+//three parts of an array of sum/3 
+int Solution::solve(int A, vector<int> &B) {
+    
+    int sum=0;
+    for(int i=0;i<B.size();i++)
+    sum+=B[i];
+    
+    if(sum%3!=0)
+    return 0;
+    int sum13=sum/3;
+    int sum23=(2*sum)/3;
+    int ans=0;
+    sum=0;
+    int x=0;
+    for(int i=0;i<B.size()-1;i++)
+    {
+        sum+=B[i];
+        if(sum==sum23)ans+=x;
+        
+        if(sum==sum13)x++;
+    }
+    return ans;
+}
+
+//Flip 
+vector<int> Solution::flip(string A) {
+    
+   int l=-1,r=-1,in=0;
+   int sum=0;
+   int cur_max=0;
+   for(int i=0;i<A.size();i++)
+   {
+       if(A[i]=='1')
+       sum+=1;
+       else sum-=1;
+       
+       if(sum>0)
+       {
+       in=i+1;
+       sum=0;
+       }
+       
+       if(sum<0 && cur_max>sum)
+       {
+           cur_max=sum;
+           l=in;
+           r=i;
+       }
+   }
+   vector<int>ans;
+   if(l==-1)
+   return ans;
+   
+   ans.push_back(l+1);
+   ans.push_back(r+1);
+   return ans;
+}
+
+
+
+//Merge interval after inserting 
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+bool static sortby(Interval a,Interval b)
+{
+    return a.start<b.start;
+}
+vector<Interval> Solution::insert(vector<Interval> &intervals, Interval newInterval) {
+        intervals.push_back(newInterval);
+        sort(intervals.begin(),intervals.end(),sortby);
+        vector<Interval>ans;
+        Interval cur;
+        cur.start=intervals[0].start;
+        int i=1,j=0;
+        int p=intervals[0].end;
+        int n=intervals.size();
+        
+        for(;i<intervals.size();)
+        {
+            int curend=intervals[j].end;
+            int curbeg=intervals[i].start;
+            
+            p=max(p,intervals[i-1].end);
+            
+            if(curbeg>curend)
+            {
+                j++;
+                if(i==j)
+                {
+                    cur.end=p;
+                    ans.push_back(cur);
+                    cur.start=intervals[i].start;
+                    p=intervals[i].end;
+                    
+                }
+            } else i++;
+        }
+        p=max(p,intervals[n-1].end);
+        cur.end=p;
+        ans.push_back(cur);
+        
+        return ans;
+}
+
+
+//Pascals triangle 
+vector<vector<int> > Solution::solve(int A) {
+    
+    vector<vector<int>>ans;
+    if(A==0)
+    return ans;
+    vector<int>v;
+    v.push_back(1);
+    ans.push_back(v);
+    for(int i=1;i<A;i++)
+    {
+        v.clear();
+        int temp=1;
+        int k=i;
+        for(int j=0;j<=i;j++)
+        {
+            v.push_back(temp);
+            temp=temp*(k);
+            k--;
+            temp=(temp)/(j+1);
+        }
+        ans.push_back(v);
+    }
+    return ans;
+}
+
+//spiral order matrix 
+vector<vector<int> > Solution::generateMatrix(int A) {
+    
+    vector<vector<int>>ans(A,(vector<int>(A,0)));
+    int up=0,down=A-1,lef=0,rig=A-1;
+    int x=1;
+    while(up<=down)
+    {
+        for(int i=lef;i<=rig;i++)
+        ans[up][i]=x++;
+        
+        up++;
+        
+        for(int i=up;i<=down;i++)
+        ans[i][rig]=x++;
+        
+        rig--;
+        
+        for(int i=rig;i>=lef;i--)
+        ans[down][i]=x++;
+        
+        down--;
+        for(int i=down;i>=up;i--)
+        ans[i][lef]=x++;
+        
+        lef++;
+    }
+    return ans;
+}
+
+
+//spiral matrix (N*M)
+vector<int> Solution::spiralOrder(const vector<vector<int> > &A) {
+    
+  vector<int>ans;
+  
+  int up=0,down=A.size()-1,lef=0,rig=A[0].size()-1;
+  
+  int x=0;
+  
+  while(up<=down && lef<=rig)
+  {
+      if(x==0)
+      {
+          for(int i=lef;i<=rig;i++)
+          ans.push_back(A[up][i]);
+          
+          up++;
+          x=1;
+      }
+      else if(x==1)
+      {
+          for(int i=up;i<=down;i++)
+          ans.push_back(A[i][rig]);
+          
+          rig--;
+          x=2;
+      }
+      else if(x==2)
+      {
+          for(int i=rig;i>=lef;i--)
+          ans.push_back(A[down][i]);
+          
+          down--;
+          x=3;
+      }
+      else if(x==3)
+      {
+          for(int i=down;i>=up;i--)
+          ans.push_back(A[i][lef]);
+          
+          lef++;
+          x=0;
+      }
+      else break;
+  }
+  return ans;
+}
+
+//Anti diagonal 
+vector<vector<int> > Solution::diagonal(vector<vector<int> > &A) {
+    vector<vector<int>>ans(2*A.size()-1);
+    
+    for(int i=0;i<A.size();i++)
+    {
+        for(int j=0;j<A[i].size();j++)
+        ans[i+j].push_back(A[i][j]);
+    }
+    return ans;
+}
+
+
+int main() {	
+	return 0;
+}
