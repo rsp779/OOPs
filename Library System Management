@@ -1,0 +1,137 @@
+class Library{
+    string name;
+    address location;
+    vector<BookItem>books;
+};
+class address{
+    int pincode; //ZipCode
+    string street;
+    sring city;
+    string country;
+    string state;
+    
+};
+
+class Book{
+    string name;
+    string uniqueid;
+    vector<Author>authors;
+    BookType booktype;
+};
+class Bookitem : public Book{
+    string barcode;
+    string publicationdate;
+    Rack racklocation;
+    BookStatus bookstatus;
+    BookFormat bookFormat;
+    string issuedate;
+    
+};
+
+class Booktype{
+    
+    void scin(){};
+    void romantic(){};
+    void fantasy (){};
+    void drama(){};
+}
+
+class Bookformat()
+{
+    void hardcover(){}
+    void paperback(){}
+    void newspaper(){}
+};
+class BookStatus{
+    void issued(){}
+    void reserved(){}
+    void lost(){}
+    void reserved(){}
+};
+
+class Rack{
+    int number;
+    string locatioId;
+};
+
+class person{
+    string firstname;
+    string lastname;
+};
+class Author : public person{
+    vector<Book>bookPublished;
+};
+
+class systemuser : public person{
+    string Email;
+    string phonenumber;
+    Account account;
+};
+class member : public systeruser{
+    
+    int totalBookCheckedOut;
+    Search searchobj;
+    BookIssueService issueService;
+    
+};
+class Librarian : public systemuser{
+    Search searchobj;
+    BookIssueService issueService;
+    
+    void Addbook(BookItem bookitem){}
+    void deletbook(String barcode){}
+    void editBookItem(bookItem bookitem){}
+};
+
+
+class Account{
+    String username;
+    String password;
+    int accountID;
+};
+
+class Search{
+    
+    vector<BookItem> getbookbytitle(string title){}
+     vector<BookItem> getbookbynumber(Author author){}
+    vector<BookItem> getbookbytyep(BookType booktype){}
+     vector<BookItem> getbookbypublication(string date){}
+};
+
+class BookIssueService{
+    FineService finservice;
+    
+    BookReservationDetail getReservationDetail(BookItem book);
+    
+    void updateReservationDetail(BookReservationDetail bookreservationdetail);
+    
+    void Bookreservationdetail reserveBook(bookitem book,system user user);
+     
+     
+    //issuebook
+    //renewbook
+    //returnbook
+};
+class Booklending {
+    BookItem book;
+    string startdate;
+    SystemUser user;
+}
+
+class BookReservationDetail : public Booklending {
+    ReservationStatus reservationStatus ;
+    
+}
+class BookIssueDetail : public Booklending{
+    string duedate;
+};
+
+class FineService{
+    void fine calculatefine(Bookiterm book,SystemUser User,int days);
+};
+class Fine{
+    string finedate;
+    BookItem book;
+    SystemUser user;
+    Double finevalue;
+};
