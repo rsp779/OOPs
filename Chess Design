@@ -1,0 +1,81 @@
+class Chess{
+    ChessBoard chessboard;
+    vector<Player> player;
+    Player currentPlayer;
+    vector<Move>moveList;
+    GameStatus gameStatus;
+    
+    bool playerMove(CellPosition fromPosition,CellPosition toPosition,Piece piece)
+    bool endGame();
+    private : void changeTurn();
+};
+
+class Player
+{
+    Account account;
+    Color color;
+    Time timeleft;
+}
+
+class Account{
+    string username;
+    string password;
+    string name;
+    string email;
+    string phonenumber;
+};
+
+class color{
+    string b="BLACK";
+    string w="WHITE";
+}
+
+
+class time {
+    int mins;
+    int secs;
+};
+
+void GameStatus{
+    "Active" "Paused"  "Forfeight"  "Black win" "White win"
+};
+
+class chessboard{
+    vector<vector<Cell>>board;
+    
+    void resetBoard();
+    
+    void updateBoard(Move move);
+};
+class cell{
+    Color color;
+    Piece piece;
+    CellPosition position;
+};
+
+class CellPosition{
+    char ch;
+    int i;
+};
+class Move{
+    Player turn;
+    Piece piece;
+    Piece KilledPiece;
+    CellPosition startPosition;
+    CellPosition endPostion;
+};
+
+class Piece {
+    Color color;
+    
+    bool move(CellPosition fromPosition,CellPostion toPosition);
+    vector<CellPosition> possibleMoves(CellPosition fromPostion,CellPosition toPosition);
+    bool validate(CellPosition fromPostion ,CellPostion toPosition);
+}
+
+clase (All pieces) : public pieces {
+    
+    bool move(CellPostion fromposition,CellPosition toPosition);
+    vector<CellPosition> possibleMove(CellPosition fromposition);
+    bool validate(CellPosition fromposition,CellPosition toPosition);
+}   
