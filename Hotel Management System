@@ -120,11 +120,59 @@ class ReceptionList : public person{
 }
 
 class admin : public person{
-    void addroom();
-    void deleteroom();
-    void editroom();
-}
+    void addroom(Room roomDetail);
+    void deleteroom(String roomID);
+    void editroom(Room roomDetail);
+};
 
 
+class search{
+    public :
+    vector<Room> searchRoom(RoomStyle roomStyle,Date startDate,int duration);
+};
 
-}
+Booking{
+    public :
+    RoomBooking createBooking(Guest guestInfo);
+    RoomBooking cancelBooking(int bookingId);
+};
+
+class RoomBooking{
+    string bookingId;
+    Date startDate;
+    Int durationInDays;
+    BookingStatus BookingStatus;
+    vector<Guest>guestList;
+    vector<Room>roomInfo;
+    BaseRoomCharge totalRoomCharges;
+};
+
+
+class RoomCharge : public BaseRoomCharge{
+    double cost;
+    double getCost(){
+        return cost;
+    }
+    void setCost(double cost)
+    {
+        this.cost=cost;
+    }
+};
+Class RoomServiceCharge : BaseRoomCharge {
+    double cost;
+    BaseRoomCharge baseRoomCharge;
+    Double getCost()
+    {
+        baseRoomCharge.setCost(baseRoomCharge.getCost()+cost);
+        return baseRoomCharge.getCost();
+    }
+};
+
+class InRoomPurchaseCharges : public BaseRoomCharge {
+    double cost;
+    BaseRoomCharge BaseRoomCharge;
+    Double getCost(){
+        baseRoomCharge.setCost(baseCharge.getCost()+cost);
+        return baseRoomCharge.getCost();
+    }
+};
