@@ -1,0 +1,187 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//submatrix max sum size of B
+
+int solve(vector<vector<int>>v<int B)
+{
+    int n=v.size();
+    int m=v[0].size();
+    
+    vector<vector<int>>dp(n+1,vector<int>(m+1,0));
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=m;j++)
+        {
+            dp[i][j]=v[i-1][j-1]+dp[i-1][j]+dp[i][j-1]-dp[i-1][j-1];
+        }
+    }
+    
+    int ans=INT_MIN;
+    
+    for(int i=B;i<=n;i++)
+    {
+        for(int j=B;j<=m;j++)
+        {
+            ans=max(ans,dp[i][j]-dp[i-B][j]-dp[i][j-B]+dp[i-B][j-B]);
+        }
+    }
+}
+
+//find the first missing positive integer 
+int solve(vector<int>v)
+{
+    int n=v.size();
+    
+    for(int i=0;i<n;i++)
+    {
+        if(A[i]>0 && A[i]<n)
+        {
+            int pos=A[i]-1;
+            
+            if(A[i]!A[pos])
+            {
+                swap(A[i],A[pos]);
+                i--;
+            }
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        if(A[i]!=(i+1))
+        return i+1;
+    }
+    return n+1;
+}
+
+//Set Matrix Zero 
+void Solution::setZeroes(vector<vector<int> > &A) {
+    int n=A.size();
+    int m=A[0].size();
+    
+    bool row=false;
+    bool col=false;
+    
+    for(int i=0;i<n;i++)
+    {
+        if(A[i][0]==0)
+        row=true;
+    }
+    
+    for(int j=0;j<m;j++)
+    {
+        if(A[0][j]==0)
+        col=true;
+    }
+    
+    for(int i=1;i<n;i++)
+    {
+        for(int j=1;j<m;j++)
+        {
+            if(A[i][j]==0)
+            {
+                A[0][j]=0;
+                A[i][0]=0;
+            }
+        }
+    }
+    
+    for(int i=1;i<n;i++)
+    {
+        for(int j=1;j<m;j++)
+        {
+            if(A[i][j]==1 && (A[i][0]==0 || A[0][j]==0))
+            A[i][j]=0;
+        }
+    }
+    if(row)
+    {
+        for(int i=0;i<n;i++)
+        A[i][0]=0;
+    }
+    if(col)
+    {
+        for(int j=0;j<m;j++)
+        A[0][j]=0;
+    }
+}
+
+
+//Given an array A of integers, find the maximum of j - i subjected to the constraint of A[i] <= A[j].
+int Solution::maximumGap(const vector<int> &A) {
+
+    int n=A.size();
+    vector<int>rig(n,0);
+
+    rig[n-1]=A[n-1];
+
+    for(int i=n-2;i>=0;i--)
+    rig[i]=max(rig[i+1],A[i]);
+
+    int i=0,j=0;
+    int ans=0;
+    while(i<n && j<n)
+    {
+       if(rig[j]>=A[i])
+       {
+       ans=max(ans,j-i);
+       j++;
+       }
+       else i++;
+    }
+    return ans;
+}
+
+//Hotel Bookings Possible 
+bool Solution::hotel(vector<int> &arrive, vector<int> &depart, int K) {
+        sort(arrive.begin(),arrive.end());
+        sort(depart.begin(),depart.end());
+        
+        int i=0,j=0;
+        int n=arrive.size();
+        int maxroomreq=0;
+        while(i<n)
+        {
+            if(arrive[i]<depart[j])
+            {
+                i++;
+                maxroomreq=max(maxroomreq,i-j);
+            }
+            else j++;
+        }
+       
+        if(maxroomreq>K)
+        return false;
+        
+        return true;
+}
+
+//Find Permutation 
+vector<int> Solution::findPerm(const string A, int B) {
+    
+    int n=A.size();
+    vector<int>ans(n+1,0);
+    int j=B;
+    int i=1;
+    
+    int k=0;
+    
+    while(k<n)
+    {
+        if(A[k]=='D')
+        ans[k]=j--;
+        else ans[k]=i++;
+        
+        k++;
+    }
+    ans[k]=i;
+    return ans;
+}
+
+
+
+int main() {
+	// your code goes here
+	return 0;
+}
