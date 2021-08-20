@@ -1,0 +1,235 @@
+#include <iostream>
+using namespace std;
+
+
+//UGLY NUMBER 
+// prime factors use priority queue 
+
+//maximum sum bitonic subsequence 
+int maxSumBS(int arr[] , int n )
+{
+    vector<int>ford(n,0);
+    
+    
+    for(int i=0;i<n;i++)
+    {
+        ford[i]=arr[i];
+        for(int j=0;j<i;j++)
+        {
+            if(arr[i]>arr[j])
+            {
+                ford[i]=max(ford[i],arr[i]+ford[j]);
+            }
+        }
+    }
+    
+    int ans=0;
+    vector<int>bac(n,0);
+    
+    for(int i=n-1;i>=0;i--)
+    {
+        bac[i]=arr[i];
+        for(int j=n-1;j>i;j--)
+        {
+            if(arr[i]>arr[j])
+            {
+                bac[i]=max(bac[i],arr[i]+bac[j]);
+            }
+        }
+        ans=max(ans,ford[i]+bac[i]-arr[i]);
+    }
+    return ans;
+}
+
+//LCS of 3 string 
+int LCSof3 (string A, string B, string C, int n1, int n2, int n3)
+{
+   int dp[n1+1][n2+1][n3+1];
+   
+   for(int i=0;i<=n1;i++)
+   {
+       for(int j=0;j<=n2;j++)
+       {
+           for(int k=0;k<=n3;k++)
+           {
+               dp[i][j][k]=-1;
+           }
+       }
+   }
+   dp[0][0][0]=0;
+   for(int i=0;i<=n1;i++)
+   {
+       for(int j=0;j<=n2;j++)
+       {
+           for(int k=0;k<=n3;k++)
+           {
+               
+               if(i==0 || j==0 || k==0)
+               {
+               dp[i][j][k]=0;
+               continue ;
+               }
+               
+               else if(A[i-1]==B[j-1] && A[i-1]==C[k-1])
+               dp[i][j][k]=1+dp[i-1][j-1][k-1];
+               
+               else dp[i][j][k]=max(dp[i-1][j][k],max(dp[i][j-1][k],dp[i][j][k-1]));
+           }
+       }
+   }
+   return dp[n1][n2][n3];
+}
+
+//LCS of 3 string 
+int LCSof3 (string A, string B, string C, int n1, int n2, int n3)
+{
+   int dp[n1+1][n2+1][n3+1];
+   
+   for(int i=0;i<=n1;i++)
+   {
+       for(int j=0;j<=n2;j++)
+       {
+           for(int k=0;k<=n3;k++)
+           {
+               dp[i][j][k]=-1;
+           }
+       }
+   }
+  
+   for(int i=0;i<=n1;i++)
+   {
+       for(int j=0;j<=n2;j++)
+       {
+           for(int k=0;k<=n3;k++)
+           {
+               
+               if(i==0 || j==0 || k==0)
+               {
+               dp[i][j][k]=0;
+               continue ;
+               }
+               
+               else if(A[i-1]==B[j-1] && A[i-1]==C[k-1])
+               dp[i][j][k]=1+dp[i-1][j-1][k-1];
+               
+               else dp[i][j][k]=max(dp[i-1][j][k],max(dp[i][j-1][k],dp[i][j][k-1]));
+           }
+       }
+   }
+   return dp[n1][n2][n3];
+}
+
+//Equal sum partition of the array 
+int equalPartition(int N, int arr[])
+    {
+        int sum=0;
+        
+        for(int i=0;i<N;i++)
+        sum+=arr[i];
+        
+        if(sum%2!=0)
+        return 0;
+        
+        sum=sum/2;
+        
+        vector<vector<int>>dp(N+1,vector<int>(sum+1,0));
+        
+        for(int i=1;i<=N;i++)
+        {
+            for(int j=0;j<=sum;j++)
+            {
+                dp[i][j]=dp[i-1][j];
+                
+                if(j==arr[i-1])
+                dp[i][j]=1;
+                
+                else if (j>arr[i-1])
+                dp[i][j]=dp[i][j] || dp[i-1][j-arr[i-1]];
+                
+            }
+        }
+        return dp[N][sum];
+    }
+};
+
+//Box stacking Leetcode version 
+int maxHeight(vector<vector<int>>& A) {
+        for (auto& a : A)
+            sort(begin(a), end(a));
+       
+        sort(A.begin(), A.end());
+        int n = A.size(), res = 0;
+        vector<int> dp(n);
+        for (int j = 0; j < n; ++j)
+        {
+            dp[j]=A[j][2];
+            for (int i = 0; i < j; ++i)
+                if (A[i][0] <= A[j][0] && A[i][1] <= A[j][1] && A[i][2] <= A[j][2]) {
+                    dp[j] = max(dp[j], dp[i] + A[j][2]);
+                    
+                }
+            res = max(res, dp[j]);
+        }
+        return res;
+}
+
+//Minimum insertion to make it palindrome 
+int countMin(string str){
+    
+    
+            string x=str;
+            reverse(x.begin(),x.end());
+            
+            int n=x.length();
+            
+            vector<vector<int>>dp(n+1,vector<int>(n+1,0));
+            
+            for(int i=1;i<=n;i++)
+            {
+                for(int j=1;j<=n;j++)
+                {
+                    if(str[i-1]==x[j-1])
+                    dp[i][j]=1+dp[i-1][j-1];
+                    else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        return x.length()-dp[n][n];
+    }
+
+// max product cutting 
+int maxrodcutting(int n)
+{
+    dp[0]=0;
+    dp[1]=0;
+    dp[2]=1;
+    dp[3]=2;
+    dp[4]=4;
+    for(int i=5;i<=n;i++)
+    {
+        dp[i]=0;
+        for(int j=1;j<i;j++)
+        dp[i]=max(dp[i],max((i-j)*j,dp[j]*(i-j)));
+        
+        cout<<i<<" "<<dp[i]<<endl;
+    }
+    cout<<dp[n];
+}
+
+// O(1) space approach 
+int maxproductcutting(int n)
+{
+    if(n==2 || n==3) return n-1;
+    
+    int pro=1;
+    while(n>4)
+    {
+        n-=3;
+        pro*=3;
+    }
+    return n*pro;
+}
+
+int main() {
+	// your code goes here
+	return 0;
+}
