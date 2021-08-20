@@ -229,6 +229,196 @@ int maxproductcutting(int n)
     return n*pro;
 }
 
+
+//Optimal statergy to win a game 
+ int solve(vector<int>&nums,int i,int j,vector<vector<int>>&dp)
+    {
+        if(i==j)
+            return nums[i];
+        
+        if(i>j)
+            return 0;
+        
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+        
+        return dp[i][j]=max(nums[i]+min(solve(nums,i+2,j,dp),solve(nums,i+1,j-1,dp)),
+                            nums[j]+min(solve(nums,i,j-2,dp),solve(nums,i+1,j-1,dp)));
+    }
+    bool PredictTheWinner(vector<int>& nums) {
+        int sum=0;
+        for(int i=0;i<nums.size();i++)
+            sum+=nums[i];
+        
+        int n=nums.size();
+        vector<vector<int>>dp(n,vector<int>(n,-1));
+        
+        int val=solve(nums,0,nums.size()-1,dp);
+        
+        if(sum%2==0 && val>=sum/2)
+            return true ;
+        
+        if(sum%2!=0 && val>sum/2)
+            return true;
+        
+        return false;
+}
+
+//Word break 
+ bool wordBreak(string s, vector<string>& wordDict) {
+        
+        int n=s.length();
+        unordered_map<string,int>mp;
+        
+        for(int i=0;i<wordDict.size();i++)
+            mp[wordDict[i]]=1;
+        
+        vector<bool>dp(n,false);
+        
+        for(int i=0;i<n;i++)
+        {
+            if(mp.find(s.substr(0,i+1))!=mp.end())
+                dp[i]=true;
+            
+            if(dp[i]==true)
+            {
+                for(int j=i+1;j<n;j++)
+                {
+                    if(mp.find(s.substr(i+1,j-i))!=mp.end())
+                       dp[j]=true;
+                    
+                    if(j==n-1 && dp[j])
+                        return true;
+                }
+            }
+        }
+        return dp[n-1];     
+}
+
+// Number of solutions ax + by  + ..... =n 
+
+int solve(vector<int>v,int n)
+{
+    int dp[n+1];
+    dp[0]=1;
+    
+    for(int i=1;i<=n;i++)dp[i]=0;
+    
+    for(int i=0;i<v.size();i++)
+    {
+        for(int j=v[i];j<=n;j++)
+        {
+            dp[j]+=dp[j-v[i]];
+        }
+    }
+    return dp[n];
+}
+
+//Mobile Numeric Key 
+	long long getCount(int N)
+	{
+	    map<long long,long long>mp;
+	    
+	    for(int i=0;i<=9;i++)
+	    mp[i]=1;
+	    
+	    for(int i=1;i<N;i++)
+	    {
+	        map<long long,long long>x;
+	        
+	            x[0]=mp[8]+mp[0];
+	            x[1]=mp[1]+mp[2]+mp[4];
+	            x[2]=mp[2]+mp[3]+mp[1]+mp[5];
+	            x[3]=mp[2]+mp[6]+mp[3];
+	            x[4]=mp[4]+mp[1]+mp[5]+mp[7];
+	            x[5]=mp[5]+mp[2]+mp[8]+mp[4]+mp[6];
+	            x[6]=mp[3]+mp[9]+mp[5]+mp[6];
+	            x[7]=mp[7]+mp[8]+mp[4];
+	            x[8]=mp[8]+mp[0]+mp[7]+mp[9]+mp[5];
+	            x[9]=mp[6]+mp[9]+mp[8];
+	        
+	        mp=x;
+	    }
+	    long long sum=0;
+	    
+	    for(int i=0;i<10;i++)
+	    sum+=mp[i];
+	    
+	    return sum;
+}
+
+//The Painter's Partition Problem  
+ pair<int,bool> solve(int arr[],int mid,int k,int n)
+    {
+        int pain=1;
+        long long sum=0;
+        long long val=-1;
+        for(int i=0;i<n;i++)
+        {
+            sum+=arr[i];
+            
+            if(sum>mid)
+            {
+                val=max(sum-arr[i],val);
+                sum=arr[i];
+                pain++;
+            }
+            if(pain>k)return {-1,false};
+        }
+        val=max(val,sum);
+        return {val,true};
+    }
+  public:
+    long long minTime(int arr[], int n, int k)
+    {
+        long long l=0;
+        long long h=0;
+        for(int i=0;i<n;i++)h+=(long long)arr[i];
+        long long ans=INT_MAX;
+        while(l<=h)
+        {
+            long long mid=l+(h-l)/2;
+            
+            pair<long long,bool>flag=solve(arr,mid,k,n);
+            
+            if(flag.second)
+            {
+             ans=min(ans,flag.first);
+             h=mid-1;
+            }
+            else {
+                l=mid+1;
+            }
+        }
+        return ans;
+}
+    
+//Interleaving String 
+ bool isInterleave(string s1, string s2, string s3) {
+        
+        if(s1.size()+s2.size()!=s3.size())
+            return false;
+        
+        int n=s1.size(),m=s2.size();
+        vector<vector<bool>>dp(n+1,vector<bool>(m+1,false));
+        
+        dp[0][0]=true;
+        
+        for(int i=0;i<=n;i++)
+        {
+            for(int j=0;j<=m;j++)
+            {
+                if(i>0 && s1[i-1]==s3[i+j-1])
+                    dp[i][j]=dp[i][j]||dp[i-1][j];
+                
+                if(j>0 && s2[j-1]==s3[i+j-1])
+                    dp[i][j]=dp[i][j] || dp[i][j-1];
+            }
+        }
+        
+        return dp[n][m];
+}
+
 int main() {
 	// your code goes here
 	return 0;
