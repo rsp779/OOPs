@@ -179,7 +179,100 @@ vector<int> Solution::findPerm(const string A, int B) {
     return ans;
 }
 
+//largest number possible 
+static bool sortbysec(string a,string b)
+{
+    string c=a;
+    string d=b;
+    string e=a;
+    string f=b;
+    string st1=c+d;
+    string st2=d+c;
+    
+    //cout<<st2<<" "<<st1<<endl;
+    if(st2.compare(st1)>0)
+    return false;
+    
+    return true;
+}
+string Solution::largestNumber(const vector<int> &A) {
+    
+    vector<string>s;
+    int n=A.size();
+    for(int i=0;i<n;i++)
+    s.push_back(to_string(A[i]));
+    string ans="";
+   sort(s.begin(),s.end(),sortbysec);
+   for(int i=0;i<n;i++)
+  ans=ans.append(s[i]);
+  
+  int x=ans.length();
+  int i=0;
+  while(ans[i]=='0' && (i<x-1))
+  {
+      i++;
+  }
+   ans=ans.substr(i,x-i);
+   return ans;
+    
+    
+}
 
+//rotate Matrix 
+void Solution::rotate(vector<vector<int> > &A) {
+    int n=A.size()-1;
+    int x=0,y=n;
+    int temp=0;
+    while(temp<y)
+    {
+        for(int j=x;j<y;j++)
+        {
+            int temp=A[x][j];
+            A[x][j]=A[n-j][x];
+            A[n-j][x]=A[n-x][n-j];
+            A[n-x][n-j]=A[j][n-x];
+            A[j][n-x]=temp;
+        }
+        x++;
+        temp++;
+        y--;
+    }
+}
+//Next permutation 
+vector<int> Solution::nextPermutation(vector<int> &A) {
+    
+    int index=-1;
+    int n=A.size();
+    if(n==1)
+    return A;
+    for(int i=n-1;i>0;i--)
+    {
+        if(A[i]>A[i-1])
+        {
+            index=i-1;
+            break;
+        }
+    }
+    if(index==-1)
+    {
+    sort(A.begin(),A.end());
+    return A;
+    }
+    int sec=-1;
+    int mi=INT_MAX;
+    for(int i=index+1;i<n;i++)
+    {
+        if(A[i]>A[index]  && mi>A[i] )
+        {
+            sec=i;
+            mi=A[i];
+        }
+    }
+    swap(A[sec],A[index]);
+  
+    reverse(A.begin()+index+1,A.end());
+    return A;
+}
 
 int main() {
 	// your code goes here
