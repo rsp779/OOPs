@@ -65,3 +65,16 @@ from weather a,weather b
 where DATEDIFF(a.recorddate,b.recorddate)=1 and
 a.temperature>b.temperature
 
+// simple and easy 
+select p.name as name , p.population as population , p.area as area
+from World p
+where p.population > 25000000 or p.area > 3000000
+
+
+//class having more than 5 student 
+select class as class
+from courses
+group by class
+having count(distinct(student))>4
+
+
