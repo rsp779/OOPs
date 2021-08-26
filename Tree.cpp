@@ -164,7 +164,7 @@ vector<int>postorder(TreeNode *root)
         cur=cur->left;
         while(cur)
         {
-            ans.push(cur->val);
+            ans.push_back(cur->val);
             s.push(cur);
             cur=cur->right;
         }
