@@ -28,7 +28,14 @@ int solve(vector<int>v)
     }
     return ans;
 }
-
+// Simple code 
+int idp=1,ddp=1;
+for(int i=1;i<n;i++
+    {
+	    if(v[i]>v[i-1])
+		    idp=ddp+1;
+	    else ddp=idp+1;
+}
 // given height of tree how many balanced bst can be formed
 int solve(int n)
 {
