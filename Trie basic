@@ -1,3 +1,59 @@
+// maximum XOR with elements of array 
+class Solution {
+public:
+    struct trie{
+        int value;
+        vector<trie*>v;
+        trie(){
+            for(int i=0;i<2;i++)v.push_back(NULL);
+        }
+    };
+    void insert(int val,trie* head){
+        trie* cur=head;
+        int cur_val=val;
+            for(int i=31;i>=0;i--){
+                int bit = (val>>i) & 1;
+                vector<trie*>&v=cur->v;
+                if(v[bit]==NULL){
+                    trie* new_node=new trie();
+                    v[bit]=new_node;
+                    cur=v[bit];
+                }
+                else cur=v[bit];
+            }
+        cur->value=cur_val;
+    }
+    int xorele(int num,trie* head){
+        
+        trie* cur=head;
+        for(int i=31;i>=0;i--){
+            int bit=(num>>i) & 1;
+            int sea=(bit==1)?0:1;
+            vector<trie*>&v=cur->v;
+            if(v[sea]!=NULL){
+                cur=v[sea];
+            }
+            else cur=v[bit];
+        }
+        return cur->value;
+    }
+    int findMaximumXOR(vector<int>& nums) {
+        trie* head=new trie();
+        for(int i=0;i<nums.size();i++){
+            insert(nums[i],head);
+        }
+        int maxans=0;
+        for(int i=0;i<nums.size();i++){
+            int ans=xorele(nums[i],head);
+           // cout<<nums[i]<<" "<<ans<<endl;
+            maxans=max(maxans,ans xor nums[i]);
+        }
+        return maxans;
+        
+    }
+};
+
+
 #include <bits/stdc++.h>
 using namespace std;
 struct trie{
