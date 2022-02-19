@@ -80,6 +80,49 @@ void deleteword(string str)
     if(cur->we>0)  // deletes one occurence
     cur->we-=1;
 }
+//Distinct Substring in string
+struct trie{
+    char first;
+    vector<trie*>v;
+    int count;
+    bool flag;
+    trie(char ch){
+        first=ch;
+        for(int i=0;i<26;i++)v.push_back(NULL);
+        count=0;
+        flag=false;
+    }
+};
+void insert(string &word,trie* head,int &ans){
+    trie* cur=head;
+    for(int i=0;i<word.size();i++){
+        int sea=word[i]-'a';
+        vector<trie*>&v=cur->v;
+        if(v[sea]==NULL){
+            trie* new_node=new trie(word[i]);
+            v[sea]=new_node;
+            cur=v[sea];
+        }
+        else{
+            cur=v[sea];
+        }
+    }
+    if(!(cur->flag))ans+=1;
+    cur->flag=true;
+}
+int countDistinctSubstrings(string &s)
+{
+    trie* head=new trie('1');
+    int ans=0;
+    int n=s.size();
+    for(int i=0;i<s.size();i++){
+       for(int j=1;j<=s.size()-i;j++){
+         string str=s.substr(i,j) ;
+             insert(str,head,ans);
+       }  
+    }
+    return ans+1;    
+}
 int main() {
 	// your code goes here
      root=new trie('$');
