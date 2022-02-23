@@ -1,0 +1,45 @@
+Given an m x n integers matrix, return the length of the longest increasing path in matrix.
+ 
+ class Solution {
+public:
+    int solve(vector<vector<int>>& matrix, vector<vector<int>>&dp,int i,int j,int n,int m,vector<vector<bool>>&vis){
+        if(i<0 || j<0 || i>=n || j>=m)return 0;
+        if(dp[i][j]!=-1)return dp[i][j];
+        int left=0,right=0,up=0,down=0;
+        
+        vis[i][j]=true;
+        
+        if(j>0 && matrix[i][j]<matrix[i][j-1] )
+            left=solve(matrix,dp,i,j-1,n,m,vis);
+        if(i>0 && matrix[i][j]<matrix[i-1][j] )
+            up=solve(matrix,dp,i-1,j,n,m,vis);
+        if(j<m-1 && matrix[i][j]<matrix[i][j+1] )
+            right=solve(matrix,dp,i,j+1,n,m,vis);
+        if(i<n-1 && matrix[i][j]<matrix[i+1][j] )
+            down=solve(matrix,dp,i+1,j,n,m,vis);
+        
+        return dp[i][j]=1+max(left,max(up,max(down,right)));
+        
+    }
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        int m=matrix[0].size();
+        vector<vector<int>>dp(n,vector<int>(m,-1));
+        vector<vector<bool>>vis(n,vector<bool>(m,false));
+        
+       // int ans=solve(matrix,dp,0,0,n,m,vis);
+        
+        int curans=1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                curans=max(curans,solve(matrix,dp,i,j,n,m,vis));
+                cout<<dp[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+        return curans;        
+    }
+};
+
+
+//
