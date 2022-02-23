@@ -149,3 +149,28 @@ public:
     }
 };
 
+//Rod Cutting 
+class Solution{
+  public:
+  int solve(int len,int price[],int ind,vector<vector<int>>&dp){
+      if(ind<=0)return 0;
+      if(len<=0)return 0;
+      
+      if(dp[len][ind]!=-1)return dp[len][ind];
+      
+      int taken=0,nottaken=0;
+      
+      if(len>=ind)
+      taken=price[ind-1]+solve(len-ind,price,ind,dp);
+      
+      nottaken=solve(len,price,ind-1,dp);
+      
+      return dp[len][ind]=max(taken,nottaken);
+  }
+    int cutRod(int price[], int n) {
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+        return solve(n,price,n,dp);
+    }
+};
+
+//
