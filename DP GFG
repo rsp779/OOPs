@@ -71,3 +71,28 @@ public:
         
     }
 };
+
+//0-1 Knapsack 
+class Solution
+{
+    public:
+    //Function to return max value that can be put in knapsack of capacity W.
+    int solve(int w,int wt[],int val[],int index,vector<vector<int>>&dp){
+        if(index<0)return 0;
+        
+        if(dp[w][index]!=-1)return dp[w][index];
+        
+        int taken=0,nottaken=0;
+        if(w>=wt[index])
+        taken = val[index]+solve(w-wt[index],wt,val,index-1,dp);
+        
+        nottaken = solve(w,wt,val,index-1,dp);
+        
+        return dp[w][index]=max(taken,nottaken);
+    }
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+      vector<vector<int>>dp(W+1,vector<int>(n+1,-1));
+      return solve(W,wt,val,n-1,dp);
+    }
+};
