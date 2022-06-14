@@ -222,6 +222,42 @@ bool ispos(vector<string>&v,string str)
 }
 //
 
+
+//Smallest string of 0 and 1
+string Solution::multiple(int A) {
+    if(A==1 || A==0)return to_string(A);
+    queue<pair<int,string>>q;
+    q.push({1,"1"});
+    unordered_map<int,int>mp;
+    
+    while(!q.empty()){
+        pair<int,string>cur=q.front();
+        q.pop();
+        
+        int rem=cur.first;
+        int rem0=(rem*10+0)%A;
+        int rem1=(rem*10+1)%A;
+        string s0=cur.second;
+        string s1=cur.second;
+        
+        if(mp.find(rem0)==mp.end()){
+            mp[rem0]=1;
+            s0.push_back('0');
+            q.push({rem0,s0});
+            if(rem0==0)return s0;
+        }
+        if(mp.find(rem1)==mp.end()){
+            mp[rem1]=1;
+            s1.push_back('1');
+            q.push({rem1,s1});
+            if(rem1==0)return s1;
+        }
+        
+    } 
+    return "-1";
+}
+
+
 int main() {
 	// your code goes here
 	return 0;
