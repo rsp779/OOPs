@@ -1,4 +1,4 @@
-// Find
+// Find the largest number whoes subsequence has k digits
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -35,3 +35,18 @@ int main() {
 	cout<<ans<<endl;
 	
 }
+
+#Stock Span 
+
+for(int i=0;i<n;i++){
+  int cur=1;
+  while(!s.empty() &&  v[i-current]<v[i]){
+  cur+=v[i-current];
+  }
+ ans[i]=current;
+}
+
+
+
+
+
