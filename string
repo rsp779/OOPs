@@ -228,49 +228,38 @@ int Solution::solve(string A) {
 
 
 //longesr palidromic substring 
-string Solution::longestPalindrome(string A) {
-    
-    int maxlen=1;
-    string ans="";
-    ans.push_back(A[0]);
-    int n=A.length();
-    for(int i=0;i<A.length();i++)
-    {
-        int lef=i-1;
-        int rig=i+1;
+string solve(string str){
+    int ans=1;
+    string finalans;
+    finalans.push_back(str[0]);
+    int n=str.size();
+    for(int i=0;i<str.size();i++){
+        int lef=i-1,rig=i+1;
         
-        while((lef>=0) && (rig<n))
-        {
-            if(A[lef]!=A[rig])
-            break;
-            
-            if(maxlen<(rig-lef+1))
-            {
-                maxlen=rig-lef+1;
-                ans=A.substr(lef,rig-lef+1);
+        while(lef>=0 && rig<n){
+            if(str[lef]!=str[rig])break;
+            if(ans<rig-lef+1){
+                ans=rig-lef+1;
+                finalans=str.substr(lef,rig-lef+1);
             }
             lef--;
             rig++;
-        }
-        lef=i;
-        rig=i+1;
-        while((lef>=0) && (rig<n))
-        {
-            if(A[lef]!=A[rig])
-            break;
             
-            if(maxlen<(rig-lef+1))
-            {
-                maxlen=rig-lef+1;
-                ans=A.substr(lef,rig-lef+1);
+        }
+        
+        lef=i,rig=i+1;
+        while(lef>=0 && rig<n){
+            if(str[lef]!=str[rig])break;
+            if(ans<rig-lef+1){
+                ans=rig-lef+1;
+                finalans=str.substr(lef,rig-lef+1);
             }
             lef--;
             rig++;
+            
         }
-        
-        
     }
-     return ans;
+    return finalans;
 }
 
 //lenght of last word 
