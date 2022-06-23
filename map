@@ -1,0 +1,16 @@
+ /*MAP => It is implemented using Binary Search Tree 
+ All operations are of O(log n) time as all operatins are performed on BST 
+ 
+ unordered_map => It is implemented using a hash table where data are marked using a hash function.
+ 
+The key value pair is stored in two forms 
+1. Closed addressing => It is a method where the elements when have the same hash are placed in next free space.
+
+a. Linear Probing when the vacant position is searched linearly.
+b. Quadratic probing when the vacant positions are searched quadraticly.
+
+Disadvantage = > Clustering i.e a lot of elements are placed near one location and most of the spaces are unoccupied.
+
+2. Open Chaining  => This is a method used to place the elements in a link list that is placed at an array location.
+After finding the hashed position we then do linear search and find the element. */
+ 
