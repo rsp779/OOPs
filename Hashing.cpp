@@ -1,4 +1,4 @@
- /*MAP => It is implemented using Binary Search Tree 
+ /*MAP => It is implemented using Balance Binary Search Tree 
  All operations are of O(log n) time as all operatins are performed on BST 
  
  unordered_map => It is implemented using a hash table where data are marked using a hash function.
