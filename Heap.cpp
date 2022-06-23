@@ -322,61 +322,40 @@ ListNode* merge(vector<ListNode*>&v)
 }
 
 //Median of stream of integers
-class Solution
-{
-    public:
-    //Function to insert heap.
-    priority_queue<int,vector<int>>xp;   //stores max of min elements
-    priority_queue<int,vector<int>,greater<int>>ip; //stores min of max elements
-    Solution() 
-    {
-        while(!xp.empty())
-        xp.pop();
-        
-        while(!ip.empty())
-        ip.pop();
-        
-    }
-    void insertHeap(int &x)
-    {
-        if(xp.empty() || xp.top()>x)
-        xp.push(x);
-        else ip.push(x);
+class MedianFinder {
+public:
+    priority_queue<int>max_heap;
+    priority_queue<int,vector<int>,greater<int>>min_heap;
+    MedianFinder() {
+        while(max_heap.size()!=0)max_heap.pop();
+        while(min_heap.size()!=0)min_heap.pop();
     }
     
-    //Function to balance heaps.
-    void balanceHeaps()
-    {
-        if(xp.size()>ip.size()+1)
-        {
-            ip.push(xp.top());
-            xp.pop();
+    void addNum(int num) {
+        if(max_heap.size()==0)max_heap.push(num);
+        
+        else if (max_heap.top()>num){
+            max_heap.push(num);
         }
-        else if(xp.size()+1<ip.size())   //to maintain the size difference of <=1 so that we can divide the sorted array in 2 parts
-        {
-            xp.push(ip.top());
-            ip.pop();
+        else min_heap.push(num);
+        
+        if(max_heap.size()>min_heap.size()+1){
+            min_heap.push(max_heap.top());
+        max_heap.pop();
         }
-    }
-    
-    //Function to return Median.
-    double getMedian()
-    {
-        balanceHeaps();
-        if( xp.size()!=0 && xp.size()==ip.size())
-        {
-            return((xp.top()+ip.top())/2.0);
-        }
-        else {
-            if(xp.empty())
-            return(ip.top())*1.0;
-            else if(ip.empty())
-            return(xp.top())*1.0;
+        else if (min_heap.size()>max_heap.size())
             
-            else {
-              return ((xp.size()>ip.size()?xp.top():ip.top())*1.0);
-            }
+        {
+            max_heap.push(min_heap.top());
+            min_heap.pop();
         }
+    }
+    
+    double findMedian() {
+        if((max_heap.size()+min_heap.size())%2==0){
+            return (max_heap.top()+min_heap.top())/2.0;
+        }
+        else return max_heap.top()*1.0;
     }
 };
 
