@@ -25,7 +25,7 @@ void sortingof3no(vector<int>&v)
     
     int k=0;
     
-    while(k<j)
+    while(k<=j)
     {
         if(v[k]==0)
         {
@@ -40,9 +40,6 @@ void sortingof3no(vector<int>&v)
         else if (v[k]==2)
         {
             swap(v[k],v[j]);
-            
-            if(k==j)
-            k++;
             
             j--;
         }
