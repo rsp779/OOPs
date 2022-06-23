@@ -97,7 +97,7 @@ vector<int> sumzero(vector<int>v)
          
          maxlen=max(maxlen,i-mp[sum-1]);
          
-         else mp[sum]=i;
+         if(mp.find(sum)==mp.end())mp[sum]=i;
         
      }
      return maxlen;
