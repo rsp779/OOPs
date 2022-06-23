@@ -471,47 +471,31 @@ int solve(string str)
 
 //Given a string S and a string T, find the minimum window in S which will contain all the characters in T in linear time complexity.
 
-int windowstring(string str,string check)
-{
-    int i=0,j=0;
-    map<char,int>mp;
-    for(int i=0;i<check.size();i++)
-    mp[check[i]]++;
+string minimum_window(string str,string find){
+    string ans="";
     
-    int count=mp.size();
-    int ans=1e9;
-    unordered_map<char,int>xp;
-    int cur=0;
-    for(int j=0;j<str.size();)
-    {
+    unordered_map<char,int>mp_find;
+    for(int i=0;i<find.size();i++)mp_find[find[i]]++;
+    int req=mp_find.size();
+    int count=0;int j=0;
+    unordered_map<char,int>mp;
+    for(int i=0;i<str.size();i++){
+        mp[str[i]]++;
         
-       while(j<str.size() && count!=cur)
-       {
-          xp[str[j]]++;
-          
-          if((mp.find(str[j])!=mp.end()) && xp[str[j]]==mp[str[j]])
-          cur++;
-          
-          j++;
-       }
-        
-        if(cur==count)
-        {
-        ans=min(ans,j-i);
-        str=str.substr(i,j-i);
-        }
-        
-        while(i<j && count==cur)
-        {
-            xp[str[i]]--;
-            
-            if(mp.find(str[i])!=mp.end() &&  xp[str[i]]<mp[str[i]] )
-            cur=cur-1;
-            i++;
+        if(mp[str[i]]==mp_find[str[i]])count++;
+        while(count==req){
+            if(ans.size()==0){
+                ans=str.substr(j,i-j+1);
+                else if(ans.size()>i-j+1){
+                    ans=str.substr(j,i-j+1);
+                }
+                mp[str[j]]--;
+                if(mp[str[j]]<mp_find[str[j]])count--;
+            }
         }
     }
-    return (ans==1e9?-1:ans);  // return str;
-}
+    return ans;
+} 
 
 //Subarray with B odd number
 int solve(vector<int>v,int B)
