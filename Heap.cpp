@@ -1,3 +1,65 @@
+#=>heap implementation
+class heap{
+    public :
+    vector<int>input;
+    int cur_Size=0;
+    
+    void modify_heap_delete(vector<int>&input,int index){
+        int left_child=2*index+1;
+        int right_child=2*index+2;
+        int final_indexindex=index;
+        int n=input.size()-1;
+        
+        if(left_child<n && input[final_indexindex]<input[left_child]){
+            final_indexindex=left_child;
+        }
+        if(right_child<n && input[final_indexindex]<input[right_child])
+        {
+            final_indexindex=right_child;
+        }
+        if(index!=final_indexindex){
+            swap(input[index],input[final_indexindex]);
+            modify_heap_delete(input,final_indexindex);
+            return;
+        }
+        
+    }
+    
+    void delete_node(){
+        cur_Size--;
+        if(input.size()==1){
+            input.clear();
+            return;
+        }
+        else {
+            input[0]=input[input.size()-1];
+            modify_heap_delete(input,0);
+        }
+    }
+    void modify_heap(vector<int>&input,int index){
+        int cur_index=index;
+        int parent=(index/2);
+        
+        if(input[parent]>=input[index]){
+            return;
+        }
+        else {
+            swap(input[parent],input[index]);
+            modify_heap(input,parent);
+        }
+    }
+    void insert_element(int x){
+        input.push_back(x);
+        cur_Size++;
+        modify_heap(input,input.size()-1);
+    }
+    void output(){
+        for(int i=0;i<cur_Size;i++)
+        cout<<input[i]<<" ";
+        cout<<endl;
+    }
+};
+
 #include <bits/stdc++.h>
 using namespace std;
 
