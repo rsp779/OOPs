@@ -8,24 +8,24 @@ string Solution::countAndSay(int A) {
     string res="1";
     A=A-1;
     
-    while(A--)
-    {
-        string ans="";
-        int i=0;
-        res.push_back(' ');
-        for(int j=0;j<res.size();j++)
-        {
-            if(res[j]!=res[i])
-            {
-                int len=j-i;
-                ans.append(to_string(len));
-                ans.push_back(res[i]);
-                i=j;
-            }
-        }
-        res=ans;
-    }
-    return res;
+   while(A--){
+       string temp=cur;
+       
+       string curval="";
+       int j=0,i=0;
+       for(;i<temp.size();i++){
+           if(temp[i]!=temp[j]){
+               int val=i-j;
+               curval.append(to_string(val));
+               curval.push_back(temp[j]);
+               j=i;
+           }
+       }
+       curval.append(to_string(i-j));
+       curval.push_back(temp[j]);
+       cur=curval;
+   }
+   return cur;
 }
 
 //length of the longest word 
