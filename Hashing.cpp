@@ -380,18 +380,18 @@ ListNode* solve(ListNode *head)
         }
         cur=cur->next->next;
     }
-    cur=head;
-    ListNode* ans=head->next;
-    
-    while(cur)
-    {
-        ListNode* temp=cur->next->next;
-        ListNode* copy=cur->next;
-        cur->next=NULL;
-        cur=temp;
-        copy->next=temp->next;
-    }
-    return ans;
+	cur=head;
+   Listnode* answerlist=new Listnode();
+Listnode *temp=answerlist;
+
+while(cur){
+    Listnode* next_node=cur->next->next;
+    temp->next=cur->next;
+    cur->next=next_node;
+    temp=temp->next;
+    cur=next_node;
+}
+return answerlist->next;
 }
 
 //Fractions
