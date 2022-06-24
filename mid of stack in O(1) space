@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class dll{
+    public :
+    
+    int val;
+    dll *next;
+    dll *prev;
+    
+    dll(int a){
+        val=a;
+        next=NULL;
+        prev=NULL;
+    }
+}
+class midofstack{
+    
+    public :
+    dll *beg=NULL,*end=NULL,*mid=NULL;
+    int count=0;
+    
+    void insert(int cur){
+         dll *temp=new *dll(cur);
+        if(beg==NULL){
+           
+            beg=temp;
+            end=temp;
+        }
+        else {
+            end->next=temp;
+            temp->prev=end;
+            end=end->next;
+        }
+        count+=1;
+        midd();
+    }
+    void midd(){
+        if(mid==NULL){
+            mid=beg;
+        }
+        else if(count%2==0){
+            mid=mid->next;
+        }
+    }
+    void deletenode(){
+        dll *cur=end;
+        end=end->prev;
+        end->next=NULL;
+        cur->prev=NULL;
+        delete(cur);
+       
+        
+        if(count%2==0)
+        mid=mid->prev;
+        
+         count=count-1;
+         if(count==0)
+         {
+             end=NULL;
+             mid=NULL;
+             beg=NULL;
+         }
+    }
+    
+    
+};
