@@ -455,33 +455,35 @@ int areaofrec(vector<int>his)
 
     return max_area;
 }
-//stack permutation
+//stack permutation => there are two queues and we have find whether or not it is possible to obtain the fianl queue using a stack and input queue
 bool stackpermutation(vector<int>a,vector<int>b)
 {
     if(a.size()!=b.size())
     return false;
     
-    stack<int>s;
-    
-    int i=0,j=0;
-    int n=a.size();
-    while(i<n || j<n)
-    {
-        if(!s.empty() && j<n && s.top()==b[j])
-        {
-            s.pop();
-            j++;
-        }
-        else if(i<n)
-        {
-            s.push(a[i]);
-            i++;
-        }
-        else return false;
-    }
-    return (s.size()==0)?true:false;
+    queue<int>input,output;
+    for(int i=0;i<n;i++){
+    input.push(a[i]);
+    output.push(b[i]);
 }
 
+stack<int>s;
+while(!input.empty()){
+
+	s.push(input.top());
+	input.pop();
+	
+	while(!output.empty() && !s.empty() && output.front()==s.top())
+	{
+		s.pop();
+		output.pop();
+	}	
+}
+
+if(input.size()==0 && s.size()==0)return true;
+return false;
+
+}
 
 //cicular queue
 struct circular{
