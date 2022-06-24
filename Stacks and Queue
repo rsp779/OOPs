@@ -238,23 +238,18 @@ class minstack()
 //greater/smaaller
 vector<int> greater(vector<int>v)
 {
-    vector<int>ans;
+    vector<int>ans(n,-1);
     stack<int>s;
     
     for(int i=0;i<v.size();i++)
     {
-        if(s.empty())
-        {
-            ans.push_back(-1);
-        }
-        else{
+        
             while(!s.empty() && v[s.top()]>v[i])
             s.pop();
             
             if(!s.empty())
-            ans.push_back(v[s.top()]);
-            else ans.push_back(-1);
-        }
+            ans[i]=v[s.top()];
+            
         s.push(i);
     }
     return ans;
@@ -345,7 +340,7 @@ string solve(string str)
     }
     return ans;
 }
-//infix ==> postfix
+//postfix => infix
 int solve(string S)
 {
    
@@ -427,10 +422,7 @@ int areaofrec(vector<int>his)
         if (s.empty() || hist[s.top()] <= hist[i])
             s.push(i++);
 
-        // If this bar is lower than top of stack, 
-        // then calculate area of rectangle with stack 
-        // top as the smallest (or minimum height) bar. 
-        // 'i' is 'right index' for the top and element 
+       
         // before top in stack is 'left index'
         else
         {
