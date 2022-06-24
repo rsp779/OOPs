@@ -1,5 +1,29 @@
 #include <iostream>
 using namespace std;
+// Bth permutation of [1,2,3......A]
+vector<int> Solution::findPerm(int A, long B) {
+    
+    vector<int>num;
+    for(long i=1;i<=A;i++)num.push_back(i);
+    
+    vector<long>fact(A+1,1);
+    for(long i=2;i<=A;i++)fact[i]=i*fact[i-1];
+    B=B%fact[A];
+    vector<int>ans;
+    long n=A;
+    while(n){
+        long index=B/fact[n-1];
+        
+        if(B%fact[n-1]==0)
+        index=index-1;
+        
+        B=B-fact[n-1]*index;
+        ans.push_back(num[index]);
+        num.erase(num.begin()+index);
+        n=n-1;
+    }
+    return ans;
+}
 //seiveoferosthenes
 vector<bool> seiveoferosthenes(int A)
 {
