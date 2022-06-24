@@ -488,6 +488,42 @@ int Solution::compareVersion(string A, string B) {
     }
 return 0;
 }
+
+// Bulls and cows => The number of "bulls", which are digits in the guess that are in the correct position.
+The number of "cows", which are digits in the guess that are in your secret number but are located in the wrong position. 
+Specifically, the non-bull digits in the guess that could be rearranged such that they become bulls. 
+Given the secret number secret and your friend's guess guess, return the hint for your friend's guess.
+
+
+ string getHint(string secret, string guess) {
+        
+         unordered_map<int,int>vis;
+        unordered_map<int,int>rep;
+        int a=0,b=0;
+        for(int i=0;i<secret.size();i++){
+            if(secret[i]==guess[i]){
+                vis[i]=1;
+                a++;
+            }
+            else rep[secret[i]]++;
+        }
+        
+        for(int i=0;i<guess.size();i++){
+            if(vis.find(i)!=vis.end())continue;
+            
+            if(rep.find(guess[i])!=rep.end() && rep[guess[i]]>0){
+                b++;
+                rep[guess[i]]--;
+            }
+        }
+        string finalans="";
+         finalans=to_string(a);
+         finalans=finalans+'A';
+        string cur=to_string(b);
+        finalans.append(cur);
+         finalans=finalans+'B';
+        return finalans;
+    }
 int main() {
 	// your code goes here
 	return 0;
