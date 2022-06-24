@@ -84,57 +84,37 @@ int Solution::nTriang(vector<int> &A) {
 }
 //Maximum Ones after modification 
 
-int Solution::solve(vector<int> &A, int B)
-{
-    int i=0,j=0;
-    int n=A.size();
-    int ans=0;
-    while(j<n)
-    {
-        while(j<n && B>0)
-        {
-            if(A[j]==0)
-            B--;
-            
-             j++;
-             
-            ans=max(ans,j-i);
+int j=0,ans=0;
+    for(int i=0;i<A.size();i++){
+        if(A[i]==0)B--;
+        while(B<0){
+            if(A[j]==0)B++;
+            j++;
         }
-        while(i<=j && B<0)
-        {
-            if(A[i]==0)
-            B++;
-            i++;
-        }
+        ans=max(ans,i-j+1);
     }
     return ans;
-}
 
 //Maximum number of 1 after chaging B number of zero continuous 
-int Solution::solve(vector<int> &A, int B) {
-   int i=0,j=0;
-    int n=A.size();
-    int ans=0;
-    while(j<n)
-    {
-        while(j<n && B>=0)
-        {
-            if(A[j]==0)
-            B--;
-            
-              j++;
-              if(B>=0)
-            ans=max(ans,j-i);
-           
-           // cout<<ans<<endl;
+vector<int> Solution::maxone(vector<int> &A, int B) {
+    int size=0,j=0,index=-1;
+
+    for(int i=0;i<A.size();i++){
+        if(A[i]==0)B--;
+        while(B<0){
+               if(A[j]==0)B++;
+               j++; 
         }
-        while(i<=j && B!=0)
-        {
-            if(A[i]==0)
-            B++;
-            i++;
+        int curlen=i-j+1;
+        if(curlen>size){
+            size=curlen;
+            index=j;
         }
     }
+    vector<int>ans;
+    for(int i=index;i<index+size;i++)
+    ans.push_back(i);
+
     return ans;
 }
 
@@ -293,8 +273,12 @@ void Solution::sortColors(vector<int> &A) {
         if(A[i]==0)
         {
             swap(A[i],A[l]);
-            i++;
-            l++;
+            
+	    if(i==l)
+	    i++;
+	    
+	    l++;
+    
         }
         else if(A[i]==2)
         {
