@@ -55,34 +55,32 @@ int Solution::threeSumClosest(vector<int> &A, int B) {
 
 //Counting Triangles
 int Solution::nTriang(vector<int> &A) {
-    sort(A.begin(),A.end());
-    int mod=1e9+7;
-    int low=0;
-    while(A[low]==0)
-    low++;
-    long long int ans=0;
-    for(int i=A.size()-1;i>=low+2;i--)
-    {
-        int l=low;
-        int h=i-1;
-        while(l<h)
-        {
-            int a=A[l];
-            int b=A[h];
-            int c=A[i];
-            
-            if(a+b>c)
-            {
-                ans+=(h-l);
-                h--;
-            }
-            else {
-                l++;
-            }
-            
-        }
-    }
-    return ans%mod;
+   sort(A.begin(),A.end());
+    if(A.size()<3)return 0;
+   long long int ans=0;
+   int last=0;
+   for(;last<A.size();last++)if(A[last]!=0)break;
+   
+   for(int k=A.size()-1;k>=0;k--){
+       
+       int i=last,j=k-1;
+       while(i<j){
+           int a=A[i],b=A[j],c=A[k];
+           if(a==b && a==c){
+               ans+=1;
+               j--;
+               i++;
+           }
+           else if(a+b>c){
+               ans+=j-i;
+               j--;
+           }
+           else {
+               i++;
+           }
+       }     
+   }
+   return ans%(1000000007); 
 }
 //Maximum Ones after modification 
 
