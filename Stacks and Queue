@@ -522,7 +522,7 @@ bool redundant(string str)
            while(s.top()!='(')
            {
                char x=s.top();
-               if(x==''......)
+               if(x=='+' || x=='-' || x=='*' || x=='/')
                flag=false;
                
                s.pop();
