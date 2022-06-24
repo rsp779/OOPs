@@ -36,15 +36,19 @@ vector<int> swm(vector<int>v,int B)
     
     for(int i=0;i<n;i++)
     {
-        while(!dq.empty() && dq.front()>=i-B)
-        dq.pop_front();
+        
         
         while(!dq.empty() && v[dq.back()]<v[i])
         dq.pop_back();
         
         dq.push(i);
-        if(i+1>=B)
+	
+        if(i+1>=B){
         ans.push_back(v[dq.front()]);
+	
+	if(dq.front==i-B+1)dq.pop_front();
+	
+	}
     }
     return ans;
 }
@@ -58,12 +62,12 @@ string FirstNonRepeating(string A){
 		    for(int i=0;i<A.size();i++)
 		    {
 		        mp[A[i]]++;
+			
 		        if(mp[A[i]]==1)
 		        q.push(A[i]);
 		        
 		        while(!q.empty() && mp[q.front()]!=1)
 		        {
-		            mp[q.front()]--;
 		            q.pop();
 		        }
 		        if(q.size()==0)
@@ -81,21 +85,21 @@ int solve(vector<int>v,int k)
     int ans=0;
     for(int i=0;i<v.size();i++)
     {
-        while(!mx.empty() && mx.front()>=k)
-        mx.pop_front();
-        
-        while(!mi.empty() && mi.front()>=k)
-        mi.pop_front();
         
         while(!mx.empty && v[mi.back()]>v[i])
         mi.pop_back();
         
-        while(!mi.empty() && v[mi.back()]<v[i])
-        mi.pop_back();
+        while(!mx.empty() && v[mx.back()]<v[i])
+        mx.pop_back();
         
+	mi.push_back(i);
+	mx.push_back(i);
+	
         if(i+1>=k)
         {
             ans+=v[mi.front()]+v[mx.front()];
+	    if(mi.front()==i-B+1)mi.pop_front();
+	    if(mx.front()==i-B+1)mx.pop_front();
         }
     }
     return ans;
@@ -115,17 +119,19 @@ vector<int> swm(vector<int>v,int B)
     
     for(int i=0;i<n;i++)
     {
-        while(!dq.empty() && dq.front()>=i-B)
-        dq.pop_front();
         
         if(v[i]<0)
         dq.push(i);
         
              if(i+1>=B )
           {   
-        if(dq.size()!=0)      
-        ans.push_back(v[dq.front()]);
-        else ans.push_back(0);
+       		 if(dq.size()!=0)      
+		 
+      		  ans.push_back(v[dq.front()]);
+		  
+        	else ans.push_back(0);
+		
+		if(!dq.empty() && dq.front()==i-B+1)dq.pop_front();
          }
     }
     return ans;
@@ -179,6 +185,7 @@ vector<int> swm(vector<int>v,int B)
 int orangesRotting(vector<vector<int>>& grid) {
         
         queue<pair<int,int>>q;
+	int count=0;
         int n=grid.size();
         int m=grid[0].size();
         for(int i=0;i<n;i++)
@@ -187,6 +194,7 @@ int orangesRotting(vector<vector<int>>& grid) {
             {
                 if(grid[i][j]==2)
                 q.push({i,j});
+		else if (grid[i][j]==1) count++;
             }
         }
         vector<vector<int>>v={{1,0},{-1,0},{0,1},{0,-1}};
@@ -208,44 +216,43 @@ int orangesRotting(vector<vector<int>>& grid) {
                     
                     if(x<0 || y<0 || x>=n || y>=m || grid[x][y]==2 || grid[x][y]==0)
                     continue;
-                    
+                    count--;
                     grid[x][y]=2;
                     q.push({x,y});
                 }
             }
             
         }
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-            {
-               if(grid[i][j]==1)
-               return -1;
-            }
-        }
-        return steps-1;
+       if(count==0) return steps-1;
+        return -1;
     }
     
-    //Circular petrol pump
+    //Circular petrol pump => whether or not it is possible to travel the entire array
     int tour(petrolPump p[],int n)
     {
-       int req=0;
-       int start=0;
-       int cur=0;
-       for(int i=0;i<n;i++ )
+       int extra=0,start=0,carry=0;
+       
+       for(int i=0;i<n;i++)
        {
-            cur+=p[i].petrol-p[i].distance;
-            
-            if(cur<0)
-            {
-                req+=cur;
-                cur=0;
-                start=i+1;
-            }
+       int cur=p[i].distance - p[i].petrol + carry;
+       
+       if(cur>0){
+       	carry=cur;
+       
        }
-       if(req+cur>=0)
-       return start;
-       else return -1;
+       else {
+       extra+=cur;
+       start=i+1;
+       carry=0;
+       
+       }
+       if(extra+carry>=0) return start;
+       return -1;
+       
+       }
+       
+       
+       
        
 }
 //Interleave the queue
@@ -255,32 +262,31 @@ queue<int> Interleave(queue<int>q)
     return q;
     
     int n=q.size()/2;
-    
     stack<int>s;
     
-    for(int i=0;i<n;i++)
-    {
-        s.push(q.front());
-        q.pop();
+    for(int i=0;i<n;i++){
+    	s.push(q.front());
+	q.pop();
     }
     
-    for(int i=0;i<n;i++)
-    {
-        q.push(s.top());
-        s.pop();
+    while(!s.empty()){
+    	q.push(s.top());
+	s.pop();
     }
+    for(int i=0;i<n;i++){
+    	q.push(q.front());
+	q.pop();
+    }
+    for(int i=0;i<n;i++){
+    	s.push(q.front());
+	q.pop();
     
-    for(int i=0;i<n;i++)
-    {
-        s.push(q.front());
-        q.pop();
     }
-    for(int i=0;i<n;i++)
-    {
-        q.push(q.front());
-        q.pop();
-        q.push(s.top());
-        s.pop();
+    while(!s.empty()){
+    q.push(s.top());
+    s.pop();
+    q.push(q.front());
+    q.pop();
     }
     return q;
 }
