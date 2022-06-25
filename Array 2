@@ -182,18 +182,7 @@ vector<int> Solution::findPerm(const string A, int B) {
 //largest number possible 
 static bool sortbysec(string a,string b)
 {
-    string c=a;
-    string d=b;
-    string e=a;
-    string f=b;
-    string st1=c+d;
-    string st2=d+c;
-    
-    //cout<<st2<<" "<<st1<<endl;
-    if(st2.compare(st1)>0)
-    return false;
-    
-    return true;
+   return (a+b).compare(b+a);
 }
 string Solution::largestNumber(const vector<int> &A) {
     
@@ -201,43 +190,50 @@ string Solution::largestNumber(const vector<int> &A) {
     int n=A.size();
     for(int i=0;i<n;i++)
     s.push_back(to_string(A[i]));
+    
     string ans="";
+    
    sort(s.begin(),s.end(),sortbysec);
    for(int i=0;i<n;i++)
   ans=ans.append(s[i]);
   
   int x=ans.length();
   int i=0;
+  
   while(ans[i]=='0' && (i<x-1))
   {
       i++;
   }
+  
    ans=ans.substr(i,x-i);
    return ans;
     
     
 }
 
-//rotate Matrix 
+//rotate Matrix  
+(i,j) => (n-j,i) => (n-i,n-j) => (n-j,i) => (i,j)
 void Solution::rotate(vector<vector<int> > &A) {
     int n=A.size()-1;
-    int x=0,y=n;
+    int left=0,right=n;
     int temp=0;
-    while(temp<y)
+    int row=0;
+    while(left<right)
     {
-        for(int j=x;j<y;j++)
+        for(int j=left;j<right;j++)
         {
-            int temp=A[x][j];
-            A[x][j]=A[n-j][x];
-            A[n-j][x]=A[n-x][n-j];
-            A[n-x][n-j]=A[j][n-x];
-            A[j][n-x]=temp;
+            int temp=A[row][j];
+            A[row][j]=A[n-j][row];
+            A[n-j][row]=A[n-row][n-j];
+            A[n-row][n-j]=A[j][n-row];
+            A[j][n-row]=temp;
         }
-        x++;
-        temp++;
-        y--;
+       left++;
+       right--; 
+       row++;
     }
 }
+
 //Next permutation 
 vector<int> Solution::nextPermutation(vector<int> &A) {
     
