@@ -53,8 +53,8 @@ int Solution::solve(vector<int> &A, int B) {
                 {
                     count++;
                     i=j+B-1;
-                   
                     flag=true;
+		    break;
                 }
             }
             if(flag==false)
@@ -104,12 +104,7 @@ vector<int> Solution::plusOne(vector<int> &A) {
    int n=A.size();
    
     vector<int>ans;
-    int i=n-1;
-    int carry=1;
     
-    
-    
-   
     for(int i=n-1;i>=0;i--)
     {
         int sum=A[i]+carry;
@@ -128,14 +123,14 @@ vector<int> Solution::plusOne(vector<int> &A) {
         ans.pop_back();
         j--;
     }
-    
-    
-    
     reverse(ans.begin(),ans.end());
     return ans;
    
 }
 // A[i]-A[j]| + |i-j|
+
+=> a-b + i -j = (a+i) - (b+j) 
+=> a-b-i+j    = (a-i) - (b-j)
 int Solution::maxArr(vector<int> &A) {
     int n=A.size();
     
