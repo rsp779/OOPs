@@ -88,18 +88,18 @@ int search(vector<int>&in,int i,int j,int ele)
     
     return -1;
 }
-TreeNode* posttoTree(vector<int>&post,vector<int>&in,int i,int j,int &last)
+TreeNode* posttoTree(vector<int>&post,vector<int>&in,int low,int high,int &last)
 {
     if(i>=j)
     return NULL;
     
     
-    int index=search(in,i,j,post[last--]);
+    int mid=search(in,low,high,post[last--]);   // int mid =mp[post[last--]]; => O(n*n) => O(n)
     
     TreeNode* root=new TreeNode(in[index]);
     
-    root->right=posttoTree(post,in,index+1,j,last);
-    root->left=posttoTree(post,in,i,index-1);
+    root->right=posttoTree(post,in,mid+1,high,last);
+    root->left=posttoTree(post,in,low,mid-1,last);
     
     return root;
 }
@@ -115,26 +115,12 @@ TreeNode* LCA(TreeNode* root,TreeNode* ans ,TreeNode* A,TreeNode* B)
     TreeNode* lef=LCA(root->left,ans,A,B);
     TreeNode* rig=LCA(root->right,ans,A,B);
     
-    if(root==A && root==B)
-    {
-        ans=root;
-        return root;
-    }
-    if(root==A || root==B)
-    return root;
-    
-    if((lef!=NULL || rig!=NULL) && (root==A || root==B))
-    {
-        ans=root;
-        return root;
-    }
-    
-    if(lef!=NULL && rig!=NULL)
-    {
-         ans=root;
-        return root;
-    }
-    return (lef!=NULL ?lef : rig);
+  if(root->val==A && root->val==B)ans=root;    1. If both the value are equal
+  if((lef!=NULL || rig!=NULL) && (root->val==B || root->val==C)) ans=root;
+  if(lef !=NULL && rig!=NULL) ans=root;
+  if(root->val==B || root->val==C) return root;
+  
+  return lef?lef:rig;
 }
 
 // flatten a tree to link list 
@@ -174,9 +160,9 @@ int maxsumpath(TreeNode *A, int &ans)
     int lef=maxsumpath(A->left,ans);
     int rig=maxsumpath(A->right,ans);
     
-    int x=A->val+lef+rig;
-    x=max(x,A->val);
-    x=max(x,A->val+max(lef,rig));
+    int x=A->val+lef+rig;    // node is in middle of the path
+    x=max(x,A->val);         // node is starting of the path
+    x=max(x,A->val+max(lef,rig)); // node is end of the path
     
     ans=max(ans,x);
     
@@ -201,8 +187,168 @@ int dia(TreeNode* A,int &ans)
     return 1+max(lef,rig);
 }
 
+//Burn a tree => time taken to reach the farthest node from the given node 
+
+void populateparent(TreeNode* root,unordered_map<TreeNode*,TreeNode*>&mp,TreeNode* &node,int B){
+    
+    if(root==NULL)return ;
+    if(root->val==B){
+        node=root;
+    }
+    if(root->left){
+        mp[root->left]=root;
+        populateparent(root->left,mp,node,B);
+    }
+    if(root->right){
+        mp[root->right]=root;
+        populateparent(root->right,mp,node,B);
+    }
+} 
+int Solution::solve(TreeNode* A, int B) {
+    unordered_map<TreeNode*,TreeNode*>mp;
+    TreeNode* node=NULL;
+    populateparent(A,mp,node,B);
+    queue<TreeNode*>q;
+    if(node==NULL)return 0;
+    q.push(node);
+    int timer=-1;
+   
+    unordered_map<TreeNode*,int>vis;
+    
+    while(!q.empty()){
+        int n=q.size();
+        // cout<<timer<<" "<<q.size()<<endl;
+        timer++;
+       
+        for(int i=0;i<n;i++){
+            TreeNode* cur=q.front();
+            q.pop();
+            if(vis.find(cur)!=vis.end() && mp.find(cur->right)==mp.end())continue;
+            vis[cur]=1;
+            if(cur->left && vis.find(cur->left)==vis.end()){
+                q.push(cur->left);
+            }
+            if(cur->right && vis.find(cur->right)==vis.end()){
+                q.push(cur->right);
+            }
+            if(mp.find(cur)!=mp.end() && vis.find(mp[cur])==vis.end()) {
+               // cout<<mp[cur]->val<<" "<<timer<<" "<<i<<endl;
+                q.push(mp[cur]);
+            }
+        }
+    }
+    return timer;
+}
+
+
 //serialize deserialize Tree
+
+ string serialize(TreeNode* root) {
+        string s="";
+        if(root==NULL)return s;
+        
+        queue<TreeNode*>q;
+        q.push(root);
+        s.append(to_string(root->val));
+        s.append(",");
+        while(!q.empty()){
+            int n=  q.size();
+            for(int i=0;i<n;i++){
+                TreeNode* curNode=q.front();
+                q.pop();
+                if(curNode->left)
+                {
+                    q.push(curNode->left);
+                    s.append(to_string(curNode->left->val));
+                }
+                else s.append("#");
+                s.append(",");
+                if(curNode->right){
+                    q.push(curNode->right);
+                    s.append(to_string(curNode->right->val));
+                }
+                else s.append("#");
+                s.append(",");
+            }
+        }
+        cout<<s;
+        return s;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+         if(data.size() == 0) return NULL; 
+        stringstream s(data);
+        string str; 
+        getline(s, str, ',');
+        TreeNode *root = new TreeNode(stoi(str));
+        queue<TreeNode*> q; 
+        q.push(root); 
+        while(!q.empty()) {
+            
+            TreeNode *node = q.front(); 
+            q.pop(); 
+            
+            getline(s, str, ',');
+            if(str == "#") {
+                node->left = NULL; 
+            }
+            else {
+                TreeNode* leftNode = new TreeNode(stoi(str)); 
+                node->left = leftNode; 
+                q.push(leftNode); 
+            }
+            
+            getline(s, str, ',');
+            if(str == "#") {
+                node->right = NULL; 
+            }
+            else {
+                TreeNode* rightNode = new TreeNode(stoi(str)); 
+                node->right = rightNode;
+                q.push(rightNode); 
+            }
+        }
+        return root;
+ }
+
 // Maximum Sum BST in BT
+
+vector<int> solve(TreeNode* root,int &ans){
+        if(root==NULL) return {0,INT_MIN,INT_MAX};
+        
+        vector<int> ls = solve (root->left,ans);
+        vector<int> rs = solve (root->right,ans);
+        
+        if(root->left==NULL && root->right==NULL){
+            ans=max(ans,root->val);
+            return {root->val,root->val,root->val};
+        }
+        else if (root->left == NULL){
+            if(root->val<rs[2]){
+                ans=max(ans,root->val+rs[0]);
+                return {root->val+rs[0],rs[1],root->val};
+            }
+        }
+        else if (root->right == NULL){
+            
+            if(root->val > ls[1]){
+                ans=max(ans,root->val+ls[0]);
+                return {root->val+ls[0],root->val,ls[2]};
+            }
+        }
+        else {
+            if( root->val > ls[1] && root->val< rs[2]){
+            
+                ans=max(ans,root->val+ls[0]+rs[0]);
+                return {root->val+ls[0]+rs[0],rs[1],ls[2]};
+            }
+        }
+        return {-1,INT_MAX,INT_MIN};
+   }
+
+
+
 //Same tree structure
 
 int main() {
