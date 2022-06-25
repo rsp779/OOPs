@@ -1,0 +1,121 @@
+// Reverse Bits
+unsigned int Solution::reverse(unsigned int A) {
+    unsigned int ans=0;
+    unsigned int cur=1;
+    
+    for(int i=31;i>=0;i--){
+        if(cur & A){
+            ans=ans+pow(2,i);
+        }
+        cur=cur*2;
+    }
+    return ans;
+}
+
+//Everything occurs twice except for one element
+
+int Solution::singleNumber(const vector<int> &A) {
+    int ans=0;
+    
+    for(int i=0;i<A.size();i++)ans=ans^A[i];
+    
+    return ans;
+}
+
+
+// Divide without using multiply or divide symbol
+
+logic  => 43/8  = 8*(4 + 1)+3 = (divisor * quotient) + remainder
+                  8*(pow(2,2) + pow(2,0)) + 3
+
+int Solution::divide(int a, int b) {
+  long long int A=a;
+    long long int B=b;
+    
+    if(B==0)
+    return INT_MAX;
+    
+    if(A==0)
+    return 0;
+    
+    
+    long long int sign=1;
+    if((A<0 && B>0) || (A>0&& B<0))
+    sign=-1;
+    
+    A=abs(A);
+    B=abs(B);
+    
+    long long int ans=0;
+    long long temp=0;
+    long long int x=1;
+    for(long long int i=32;i>=0;i--)
+    {
+        if((B<<i)<=A)
+        {
+            A-=(B<<i);
+            ans+=(x<<i);
+        }
+    }
+    //cout<<sign<<endl;
+    
+    if(sign==-1)
+    ans=-ans;
+    
+    if(ans<INT_MIN || ans>INT_MAX)return INT_MAX;
+    
+    return (ans);
+}
+
+Given an integer A find the Ath number whose binary representation is a palindrome.
+
+int Solution::solve(int A) {
+    int count=1;
+    int len=1;
+    while(count<A)
+    {
+        len++;
+        int eleforthislen=(1<<(len-1)/2);
+        count+=eleforthislen;
+    }
+    count-=(1<<(len-1)/2);
+    int offset=A-count-1;
+    
+    int ans=(1<<(len-1));
+    ans|=(offset<<(len/2));
+    
+    int valfr=(ans>>(len/2));
+    int rev=0;
+    
+    int n=valfr;
+    while(n!=0)
+    {
+        int lb=(n&1);
+        rev|=lb;
+        rev<<=1;
+        n>>=1;
+    }
+    rev>>=1;
+    ans|=rev;
+    return ans;
+}
+
+//tOTAL number of set bits till A 
+
+long long int ans=0;
+int mod=1e9+7;
+int Solution::solve(int x) {
+    
+    long long int A=x;
+    if(A<=0)
+    return 0;
+    if(A==1)
+    return 1;
+    
+   int a=(int)log2 (A);
+
+    ans=(a*(pow(2,a)/2))  + ((A-(1<<a)+1)%mod) + solve(A-(1<<a));
+  
+    return (ans)%mod;
+}  
+
