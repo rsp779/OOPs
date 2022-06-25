@@ -119,3 +119,29 @@ int Solution::solve(int x) {
     return (ans)%mod;
 }  
 
+//Single Number 2 => given an array there are numbers that repeat 3 times whereas only 1 number is present one time 
+
+logic : if a set bit is not present in multiples of 3 , this means that it must be coming from number which is present only one time.
+
+int Solution::singleNumber(const vector<int> &A) {
+    int ans=0;
+    int cur=1;
+    
+    for(int i=0;i<32;i++){
+        int count=0;
+        
+        for(int j=0;j<A.size();j++){
+            
+            if(A[j]&cur)
+            count++;
+            
+        }
+        if(count%3!=0){
+            ans=ans+cur;
+        }
+        cur=cur*2;
+    }
+    return ans;
+}
+
+
