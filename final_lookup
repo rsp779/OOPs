@@ -1,0 +1,31 @@
+1. k reverse linklist 
+
+ ListNode* Solution::reverseList(ListNode* A, int B) {
+    
+    if(B==1)
+    return A;
+    
+    ListNode* dummy=new ListNode(-1);
+    dummy->next=A;
+    
+    ListNode* cur=dummy,*nex=dummy,*pre=dummy;
+    
+    
+    while(pre->next!=NULL)
+    {
+        cur=pre->next;
+        nex=cur->next;
+        for(int i=1;i<B;i++)
+        {
+            cur->next=nex->next;
+            nex->next=pre->next;
+            pre->next=nex;
+            nex=cur->next;
+        }
+        pre=cur;
+    }
+    return dummy->next;
+}
+
+2. serialize deserialize tree
+3. clone of a graph
