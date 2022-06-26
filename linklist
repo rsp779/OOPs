@@ -1,6 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
+// K reverse link list 
+
+ListNode* Solution::reverseList(ListNode* A, int B) {
+    
+    if(B==1)
+    return A;
+    
+    ListNode* dummy=new ListNode(-1);
+    dummy->next=A;
+    
+    ListNode* cur=dummy,*nex=dummy,*pre=dummy;
+    
+    
+    while(pre->next!=NULL)
+    {
+        cur=pre->next;
+        nex=cur->next;
+        for(int i=1;i<B;i++)
+        {
+            cur->next=nex->next;
+            nex->next=pre->next;
+            pre->next=nex;
+            nex=cur->next;
+        }
+        pre=cur;
+    }
+    return dummy->next;
+}
+
 struct ListNode{
     
     int val;
@@ -13,18 +43,18 @@ ListNode* reverse(ListNode* head)
     if(!head || !head->next)
     return head;
     
-    ListNode* prev=head;
-    ListNode* cur=head->next;
+    ListNode* reversehead=NULL,cur=head;
     
     while(cur)
     {
-        ListNode* temp=cur->next;
-        cur->next=prev;
-        prev=cur;
-        cur=temp;
+       ListNode* nex=cur->next;
+       cur->next=reversehead;
+       reversehead=cur;
+       cur=nex;
     }
-    return prev;
+    return reversehead;
 }
+
 ListNode* reverse(ListNode* &head,ListNode* cur)
 {
   if(cur->next==NULL)
@@ -43,12 +73,17 @@ ListNode* reverse(ListNode* &head,ListNode* cur)
  //detect a cycle
  ListNode* cycle(ListNode* head)
  {
+ if(head==NULL|| head->next==NULL)return NULL;
      ListNode* slow=head,fast=head;
      
      do{
          slow=slow->next;
          fast=fast->next->next;
-     }while(fast && fast->next && fast!=slow);
+	 
+	 if(fast==slow)
+	 break;
+	 
+     }while(fast && fast->next );
      
      if(slow==fast)
      {
@@ -62,7 +97,37 @@ ListNode* reverse(ListNode* &head,ListNode* cur)
      }
      return NULL;
 }
+
+// Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+ListNode* Solution::deleteDuplicates(ListNode* A) {
+    if(A==NULL|| A->next==NULL)return A;
+    ListNode* dummy=new ListNode(-1);
+    ListNode* temp=dummy;
+    ListNode* cur=A;
+    int sum=0;
+    bool flag=true;
+    while(cur){
+        
+         int count=1;
+         while(cur && cur->next && cur->val==cur->next->val){
+             count++;
+             cur=cur->next;
+         } 
+         if(count==1){
+             temp->next=cur;
+             temp=cur;
+         }
+         cur=cur->next;   
+    }
+    
+    temp->next=NULL;
+    return dummy->next;
+}
+
+
 //remove duplicates unsorted link List 
+
 ListNode* removeduplicates(ListNode* head)
 {
     unordered_map<int,int>mp;
@@ -82,6 +147,9 @@ ListNode* removeduplicates(ListNode* head)
     return href;
 }
 
+// Addone to the last node of the linklist
+
+
 ListNode* addone(ListNode* head)
 {
     ListNode* cur=head;
@@ -96,70 +164,58 @@ ListNode* addone(ListNode* head)
         cur=cur->next;
     }
     
-    if(cur->val!=9)
+    if(cur->val!=9)      // 756
     {
         cur->val+=1;
         return head;
     }
-    if(last==NULL)  //9->9->9-{
-        {
-            last=new ListNode(0);
-            last->next=head;
-            cur=last;
-        }
-    last->val+=1;
-    
-    last=last->next;
-    while(last)
-    {
-        last->val=0;
-        last=last->next;
-    }
-    return head;
+   if(last!=NULL){
+   	last->val+=1;     // 789 
+	last=last->next;
+	
+	while(last){
+	last->val=0;
+	last=last->next;
+	}
+   	return head;
+   }
+   else {
+   	ListNode* new_head=new ListNode(1);   //999
+	new_node->next=head;
+	last=head;
+	
+	while(last){
+	last->val=0;
+	last=last->next;
+	}
+   	return new_head;
+   }
 }
 
 //Add two numbers represented by link ListNode
-ListNode* add2ll(ListNode* h1,ListNode* h2)
-{
-    stack<ListNode*> s1;
-    while(h1)
-    {
-        s1.push(h1);
-        h1=h1->next;
-    }
-    stack<ListNode*>s2;
-    while(h2)
-    {
-        s2.push(h2);
-        h2=h2->next;
-    }
-    
-    int carry=0;
-    ListNode* cur=NULL;
-    while(!s1.empty() && !s2.empty() && carry!=0)
-    {
-        int sum=carry;
-        
-        if(!s2.empty())
-        {
-            sum+=s2.top()->val;
-            s2.pop();
-        }
-        if(!s1.empty())
-        {
-            sum+=s1.top()->val;
-             cur=s1.top();
-            s1.pop();
-            cur->val=sum%10;
-        }
-        else {
-            ListNode* newnode=new ListNode(sum%10);
-            newnode->next=cur;
-            cur=newnode;
-        }
-        carry=sum/10;
-    }
-    return cur;
+
+ListNode* Solution::addTwoNumbers(ListNode* A, ListNode* B) {
+   int carry=0;
+   ListNode* dummy=new ListNode(-1);
+   ListNode* temp=dummy;
+   
+   while(A||B||carry){
+       int sum=carry;
+       if(A){
+           sum+=A->val;
+           A=A->next;
+       }
+        if (B){
+           sum+=B->val;
+           B=B->next;
+       }
+       ListNode* cur=new ListNode(sum%10);
+       carry=sum/10;
+       temp->next=cur;
+       temp=temp->next;
+   }
+  
+   return dummy->next;
 }
 
 //Merge Sort of two link List
@@ -205,7 +261,7 @@ ListNode* mergesort(ListNode* head)
     if(head==NULL && head->next==NULL)
     return head;
     
-    ListNode* slow=head,fast=head->next;
+    ListNode* slow=head,*fast=head->next;
     
     while(fast && fast->next)
     {
@@ -215,8 +271,9 @@ ListNode* mergesort(ListNode* head)
     fast=slow->next;
     slow->next=NULL;
     
-    mergesort(merge(head),merge(fast));
+    return merge(mergesort(A),mergesort(fast));
 }
+
 //ListNode Split Circular
 void split (ListNode* A,ListNode* &h1,ListNode* &h2)
 {
@@ -238,18 +295,29 @@ void split (ListNode* A,ListNode* &h1,ListNode* &h2)
 }
 
 //palindome
-bool palindome(ListNode* A,ListNode* &in)
+=>> reverse the linklist from middle and then compare t
+bool palindome(ListNode* A)
 {
-    if(A==NULL)
-    return true;
+	if(A==NULL || A->next==NULL)return true;
+	
+    ListNode* mid=A,*end=A->next;
     
-    if(palindome(A->next,in) && (in->val==A->val))
-    {
-        in=in->next;
-        return true;
-    }
-    else return false;
-    
+    while(end && end->next)
+   {
+   	mid=mid->next;
+	end=end->next->next;
+   }
+   ListNode* head_second_part=mid->next;
+   mid->next=NULL;
+   ListNode* reversehead=reverse(head_second_part);
+   
+   while(A && reversehead){
+   	if(A->val!=reversehead->val)return false;
+	A=A->next;
+	reversehead=reversehead->next;
+   
+   }
+   return true;
 }
 
 //reverse a doubly link List
@@ -260,22 +328,27 @@ struct dll{
 }
 dll* reverse(dll* head)
 {
-    dll* prev=head;
-    dll* cur=head->next;
+    dll *finalhead=NULL,*cur=head;
    
     while(cur)
     {
-        dll* temp=cur->next;
+        dll* next_node=cur->next;
         
-        prev->next=prev->back;
-        prev->back=cur;
-        
-        prev=cur;
-        cur=temp;
+       cur->next=finalhead;
+       if(finalhead)
+       finalhead->next=NULL;
+       
+       finalhead=cur;
+       cur=next_node;
     }
-    return prev;
+    return finalhead;
 }
 //flatten a link List 
+struct pair_data{
+	int value;
+	Node* node;
+
+}
 Node *flatten(Node *root)
 {
    Node *head=root;
@@ -304,6 +377,8 @@ Node *flatten(Node *root)
   
    return head->bottom;
 }
+
+
 int main() {
 	// your code goes here
 	return 0;
