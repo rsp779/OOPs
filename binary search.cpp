@@ -1,7 +1,9 @@
 #include <iostream>
 using namespace std;
 
-//bionic array
+// bitonic array => first increasing and then decreasing 
+// => find the peak and break the array in two halves first part is increasing and other part is decreasing
+// => then separately find the element in both the halves
 
 int Solution::solve(vector<int> &a, int B) {
     
@@ -62,7 +64,8 @@ int Solution::solve(vector<int> &a, int B) {
 }
 
 //wood cutting
-int check(vector<int>&A,int mid)
+// if if we get more than the required amount of wood we have to increase the height of blade so we move low to mid+1 and view verse
+int wood_quantity(vector<int>&A,int mid)
 {
     int wood=0;
     for(int i=0;i<A.size();i++)
@@ -73,14 +76,17 @@ int check(vector<int>&A,int mid)
     return wood;
 }
 int Solution::solve(vector<int> &A, int B) {
-    int low=0;
-    int high=1e9;
+    int low=0,high=A[0];
+	
+    for(int i=0;i<A.size();i++)
+	    high=max(high,A[i]);
+	
     int ans=0;
-   for(int i=0;i<40;i++)// while(low<=high)
+    while(low<=high)  //for(int i=0;i<40;i++)
     {
         int mid=high+(low-high)/2;
         
-        int quan=check(A,mid);
+        int quan=wood_quantity(A,mid);
         if(quan==B)
         return mid;
         
@@ -94,7 +100,14 @@ int Solution::solve(vector<int> &A, int B) {
     return ans;
 }
 
-// matrix search
+// matrix search => elements of the matrix is sorted row wise and the last element of the each row is greater than first element 
+// in the next row . so we can basically have one binary search to fina out the possible row and do another binary search in that row to find out 
+// that whether or not element is present in that particular row
+
+// solution 2  : think of the sorted matrix as a single sorted array and "cell" reperesenting the element number in that array 
+// => cell = (row * number of element in one row) + (pth element of the column) 
+// cell/(number of element in one row) = row number
+// cell%(number of element in one row) = column number
 
 bool search(vector<vector<int>>v,int B)
 {
@@ -102,7 +115,7 @@ bool search(vector<vector<int>>v,int B)
     int m=v[0].size();
     
     long long int l=0;
-    long long int int h=n*m-1;
+    long long int int h=n*m-1;  // total number of elemnets
     
     while(l<=h)
     {
@@ -123,7 +136,9 @@ bool search(vector<vector<int>>v,int B)
     return false;
 }
 
-//number of eleements samaler or equal to B 
+//number of eleements smaller or equal to B 
+
+// we have to find the first number that is greater than B and return that index
 int Solution::solve(vector<int> &A, int B) {
     if(A[A.size()-1]<=B)return A.size();
     int low=0;
@@ -146,6 +161,10 @@ int Solution::solve(vector<int> &A, int B) {
 }
 
 //first and last occurence of element B 
+// for first occurence if we get a number that is greater or equal to B then we will store that index and move leftward by low=mid-1;
+// for last occurence of element if we get the smaller or equal number we will store in ans and move rightwards
+
+
 vector<int> Solution::searchRange(const vector<int> &A, int B) {
     
     int first=-1;
@@ -190,6 +209,25 @@ vector<int> Solution::searchRange(const vector<int> &A, int B) {
   
 }
 //median of 2d sorted array
+// traverse between lowest element = A[0][0] and highest element = A[n-1][m-1] 
+// and find the count of elements that are smaller than or equal to that element and if this count >= req we can store it
+// here req = (n*m + 1)/2
+int count calculate(vector<int>&arr , int ele){
+	int n=arr.size();
+	int low=0,high=n-1;
+	int ans=arr.size();
+	while(low<=high){
+		int mid =low + (high-low)/2;
+		
+		if(A[mid]<=ele){
+			ans=mid;
+			low=mid+1;
+		}
+		else high=mid-1;
+	}	
+	return ans;
+}	
+
 int solve(vector<vector<int>>v)
 {
     int l=INT_MAX;
@@ -210,7 +248,7 @@ int solve(vector<vector<int>>v)
         int count=0;
         
         for(int i=0;i<n;i++)
-        count+=upper_bound(v[i].begin(),v[i].end(),mid)-v[i].begin();
+        count+=calculate_smaller_elements(v[i],mid);
         
         if(count>=req)
         {
@@ -353,13 +391,14 @@ int main() {
             int mid=l+(h-l)/2;
             
             int count=1;
-            int p=arr[0];
+            int sum=0;
             for(int i=1;i<n;i++)
             {
-                if(arr[i]-p>=mid)
+		    sum+=arr[i];
+                if(sum>=mid)
                 {
                     count++;
-                    p=arr[i];
+                    sum=arr[i];
                 }
             }
             
@@ -379,6 +418,34 @@ int main() {
 
 
 //Rotated Sorted array
+// Solution 1 : linear search 
+// Solution 2 : find the index or pivot point from and form two sorted array and separately do binary search of elements in the two array
+// solution 3 : Ultra pro max solution is to divide the array initially into two sections based on value of B and arr[0] 
+//              then locate mid with the help of arr[0] and arr[mid]
+// 		then compare arr[mid] with B
+
+//		if(B>arr[0]){
+// 			if(arr[0]<arr[mid]{
+// 				if(B>arr[mid])
+// 					low=mid+1;
+// 			else high=mid-1;
+//  			}
+// 			   else {				   
+// 				high=mid-1;   
+//  			   }	   
+// 		}
+			   
+// 		else {
+			
+//  			if(arr[0]>arr[mid]){
+// 				if(B>arr[mid])
+// 					low=mid+1;
+// 				else high=mid-1;			
+//  			}			
+//  			else {				
+// 				low=mid+1;				
+//  			}		
+// 		}		
 int Solution::search(const vector<int> &A, int B) {
     if(B==A[0])
     return 0;
@@ -451,26 +518,34 @@ double solve(vector<int>A,vector<int>B)
 }
 
 //Implement Power Function 
+//  3^7 = 3 * (3^6) =  3
+//  3 * ((3^2)^3) =  9
+//  3 * 9 * (9^2)  = 9 
+//  3 * 9 * (81^1) = 81
+//  3 * 9 * 81* (81 ^ 0) 
+
+//  1 + 2 + 4
+
 int Solution::pow(int x, int n, int d) {
     
     if(x==0)
     {
         return 1%d;
     }
-    long long int a=1;
+    long long int ans=1;
     long long int base=x;
     
     while(n>0)
     {
-        if(n%2==0)
-        {
-            base=((base)*(base))%d;
-            n=n/2;
-        }
-        else {
-            a=((a)*(base))%d;
-            n-=1;
-        }
+        if(n%2!=0){
+		ans=ans*base;
+		n=n-1;
+	}
+	    else {
+		    base=base*base;
+		    n=n/2;
+		    
+	    }
     }
     
     if(a<0)
