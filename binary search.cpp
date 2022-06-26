@@ -482,6 +482,24 @@ int Solution::search(const vector<int> &A, int B) {
 }
 
 //Median of 2 sorted arrays
+// Solutions 1 : make an array and push all the elements and find the median 
+// this is ultra pro max tarika
+
+// 2 sorted arrays 
+// 1 3 5      7 9
+//     a      b
+// 2 4 6      8 10
+//     c      d 
+
+// I can imagine the resultant sorted array to be devided into two parts .
+// first part of are having mid_first number of elemets therefor req-mid_first number of elements are 
+// coming from the second array 
+
+// there can be one of the test case that all the elements are coming from first array so from the second array we will take zero elements
+// the array is divided into two sections with first half as (a,c) and for right half we call it as (b,d)
+// => assigning the variable as INT_MIN for left half half and if all the elements are used up we will initialize INT_MAX for right half .
+
+// we do this because we take out the max element of left part whereas min element from right half.
 
 double solve(vector<int>A,vector<int>B)
 {
