@@ -1,6 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// DFS and BFS TC  - O(V+E)
+// Dijikstra Algorithm  - (V + ElogV)
+// Belman ford - O(VE)
+
+// Directed Graph 
+
 unordered_map<int,vector<int>> dbuildgraph(vector<vector<int>>v)
 {
     unordered_map<int,vector<int>>mp;
@@ -10,6 +16,8 @@ unordered_map<int,vector<int>> dbuildgraph(vector<vector<int>>v)
     }
     return mp;
 }
+
+// Undirected Graph 
 
 unordered_map<int,vector<int>> unbuildgraph(vector<vector<int>>v)
 {
@@ -21,6 +29,9 @@ unordered_map<int,vector<int>> unbuildgraph(vector<vector<int>>v)
     }
     return mp;
 }
+
+// Weighted edges undirected
+
 unordered_map<int,vector<pair<int,int>> wgraph(vector<vector<int>>v)   [1,2,5] , [4,6,8]
 {
     unordered_map<int,vector<pair<int,int>> mp;
@@ -37,11 +48,12 @@ void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis)
 {
     vis[node]=true;
     
-    for(int x : mp[node])
+    for(int index=0;i<mp[node].size() ; index++)
     {
-        if(!vis[x])
+    	int child = mp[node][i];
+        if(!vis[child])
         {
-            dfs(x,mp,vis);
+            dfs(child,mp,vis);
         }
     }
 }
@@ -51,19 +63,20 @@ void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis)
 bool iscycle(int node,unordered_map<int,vector<int>>&mp,vector<int>&vis)
 {
     vis[node]=2;
-    for(int x : mp[node])
+    for(int child : mp[node])
     {
-        if(!vis[x])
+        if(!vis[child])
         {
-            if(iscycle(x,mp,vis))
+            if(iscycle(child,mp,vis))
             return true;
         }
-        else if(vis[x]==2)
+        else if(vis[child]==2)
         return true;
     }
     vis[node]=1;
     return false;
 }
+
 /* for(int i=1;i<=n;i++)
 {
     if(!vis[i)
@@ -76,23 +89,22 @@ return false;*/
 
 
 
-//DFS undeirected graph
+//Cycle detection undeirected graph
 
-bool iscycle(int node,unordered_map<int,vector<int>>&mp,vector<int>&vis)
+bool iscycle(int node,int parent,unordered_map<int,vector<int>>&mp,vector<int>&vis)
 {
     vis[node]=1;
     
-    for(int x : mp[node])
-    {
-        if(!vis[x])
-        {
-            if(iscycle(x,mp,vis))
-            return true;
-        }
-        else if(x!=node && vis[x]==true)
-        return true;
-    }
-    return false;
+   for(int i=0;i<mp[node].size();i++){
+   int child=mp[node][i];
+   
+   if(!vis[child]){
+   	if(isCycle(child,node,mp,vis);
+	
+	else if (child!=parent && vis[child])
+	return true;
+   }
+   return false;
 }
 
 //count number of components
@@ -165,60 +177,74 @@ vector<int> topo()
     }
     vector<int>ans;
     while(s.empty()==false)
-   { ans.push_back(s.top());
-    s.pop();}
+   { 
+   ans.push_back(s.top());
+    s.pop();
+   }
    
     return ans;
 }
 
-//kahns Algorithm
+//kahns Algorithm => topo sort using BFS
 
-vector<int>v kahn(vector<vector<int>>v)
-{
-    vector<int>indeg(n,0);
-    
-    for(int i=1;i<=n;i++)
-    {
-        for(int x : mp[i])
-        indeg[x]++;
-    }
-    queue<int>q;
-    vector<int>ans;
-    for(int i=1;i<=n;i++)
-    {
-        if(indeg[i]==0)
-        {
-        q.push(i);
-       
-        }
-    }
-    
-    while(!q.empty())
-    {
-        
-        int node=q.front();
-        q.pop();
-         ans.push_back(node);
-         
-        for(int x : mp[node])
-        {
-        indeg[x]--;
-        if(indeg[x]==0)
-        q.push(x);
-        }
-    }
-    
-    if(ans.size()==n)
-    return ans;
+
+vector<int> kahnalgorithm (vector<vector<int>>&v){
+
+    int n =v.size();
+	vector<int>indeg(n,0);
+	
+	for(int i=0;i<n;i++){
+	
+	for(int j=0;j<v[i].size();j++)
+	indeg[v[i][j]]++;
+	
+	}
+
+	queue<int>q;
+	
+	for(int i=0;i<n;i++)
+	if(indeg[i]==0) q.push(i);
+	vector<int>ans;
+	while(!q.empty()){
+	
+		int node=q.front();
+		q.pop();
+		ans.push(node);
+		
+		for(int index;index<v[node].size();index++){
+		
+			indeg[v[node][index]]--;
+			if(indeg[v[node][index]]==0)
+			q.push(v[node][index]]);
+		
+		}
+	
+	}
+	return ans;
+
 }
 
+// 4 direction  => (1,0,-1,0,1)
+for(int i=0;i<4;i++)
+{
+	int next_x=cur_x+dir[i];
+	int next_y=cur_y+dir[i+1];
+
+}
 //Number of islands
 int x[4]={1,-1,0,0};
 int y[4]={0,0,1,-1};
 
+bool not_valid_index(int cur_x,int cur_y,int n,int m , vector<vector<int>>&v){
+	if(cur_x<0 || cur_y<0 || cur_x>=n ||  cur_y>=m || v[cur_x][cur_y]!=1) return true;
+	return false;
+}
+
+// Also to prevent modification of my original array we can use visited array 
+
 void numberofisland(vector<vector<int>>&v,int i,int j,int n,int m)
 {
-    if(i>0 || j>0 || i<n || j<m || vis[i][j]!=1)
+    if(not_valid_index(i,j,n,m,v))
     return ;
     
     vis[i][j]=2;
@@ -266,6 +292,10 @@ bool nbpt(int node,unordered_map<int,vector<int>>&mp,vector<int>&vis,int col)
 }
 
 //Kosaraju Algorithm for Strongly Connected components
+
+// first traverse the graph in original direction and store all the vertices in a stack
+// then we reverse all the edges of the graph and use the all the elements stored in stack to traverse the graph once again 
+// and count the number of components that results into connected component
 
 void dfs(int node ,unordered_map<int,vector<int>>&mp,vector<int>&vis,stack<int>&s)
 {
@@ -365,34 +395,37 @@ vector<int>v Dijisktra(int source)
 }
 //belman ford Algorithm
 
-bool negativeedgecyclepresent ()
+bool negativeedgecyclepresent (vector<vector<edge>>&v)
 {
+    vector<int>dis(m,INT_MAX);
+    dis[0]=0;
     
-    vector<int>v(n,INT_MAX));
+    for(int i=1 ; i<m-1;i++){
     
-    v[0]=0;
-    
-    for(int j=0;j<n;j++)
-        {
-            for(int x : mp[j])
-            v[x]=min(v[x],v[j]+x.second.second);
-        }
-    
-    vector<int>cur(n);
-    cur=v;
-         for(int j=0;j<n;j++)
-        {
-            for(int x : mp[j])
-            v[x]=min(v[x],v[j]+x.second.second);
-        }
-    
-    for(int i=0;i<n;i++)
-    {
-        if(v[i]!=cur[i])
-        return true;
+    	for(auto cur_node : v){
+		int src=cur_node.source;
+		int dist=cur_node.destination;
+		int wei=cur_node.weight;
+		
+		if(dis[src]!=INT_MAX && dis[src]+wei <dis[dist])
+		dis[dist]=min(dis[dist],dis[src]+wei);
+	
+	}
     }
-    return false;
     
+     
+    
+    	for(auto cur_node : v){
+		int src=cur_node.source;
+		int dist=cur_node.destination;
+		int wei=cur_node.weight;
+		
+		if(dis[src]!=INT_MAX && dis[src]+wei <dis[dist])
+		retrun true;
+	
+	}
+    
+    return false;
 }
 
 
@@ -421,7 +454,8 @@ void flyodwarshal ()
     }
 }
 
-//Prims Algorithm
+// Prims Algorithm
+// Minimum spanning tree is a tree that has all the nodes of the graph with minimum weight
 
 int prims()
 {
@@ -444,7 +478,7 @@ int prims()
         for(int x : mp[node])
         {
             if(!vis[x])
-            pq.push({x.second,x.first});
+            pq.push({x.second,x.first}); // the point of difference is here 
         }
     }
     return ans;
