@@ -29,7 +29,28 @@ return {cur_sum,number_of_node};
 // merge both the paths and also take care of the test case that lca doesn't appear twice 
 
 
-// 
+// Convert binary tree into dll
+
+void inorder(Dll* root,Dll* &head,Dll* &tail,Dll* &prev){
+
+	if(root==NULL)return ;
+	inorder(root->left,head,tail,prev);
+	
+	if(tail==NULL)
+	tail=root;
+	
+	head=root;
+	
+	if(prev!=NULL)
+	{
+		prev->right=root;
+		root->left=prev;
+	
+	}
+	prev=root;
+	inorder(root->right,head,tail,prev);
+
+}
 
 //1 .  1 2 3 4 8 6 7 5 9      1. // 1 2 3 4 6 5 7 8 9  // 1 2 3 4 5 6 7 8 9
 
