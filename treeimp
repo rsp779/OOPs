@@ -1,8 +1,27 @@
 #include <iostream>
 using namespace std;
+
 // We are given a Binary Tree and a number k. We want to find the sum of all nodes whose kth parent is even.
 => store the path and then find the node v.size()-(k-2) index node and check whether it is even or odd 
 //recover a binary tree --> two nodes swap in bst
+
+//Maximum average of subtree values in a given Binary Tree
+
+vector<int> postorder(TreeNode* root,double &max_ans){
+
+if(root==NULL)return {0,0};
+
+vector<int>lef=postorder(root->left,max_ans);
+vector<int>rig=postorder(root->right,max_ans);
+
+double cur_sum=root->val+lef[0]+rig[0];
+double number_of_node=1+lef[1]+rig[1];
+double cur_average=(cur_sum*1.0)/number_of_node;
+
+max_ans=max(max_ans,cur_average);
+return {cur_sum,number_of_node};
+
+}
 
 //1 .  1 2 3 4 8 6 7 5 9      1. // 1 2 3 4 6 5 7 8 9  // 1 2 3 4 5 6 7 8 9
 
