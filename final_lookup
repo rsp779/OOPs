@@ -29,3 +29,31 @@
 
 2. serialize deserialize tree
 3. clone of a graph
+4. Next pointer in the tree
+
+      while(head){
+
+      TreeNode* dummy=new TreeNode*(-1);
+      dummy->next=(head->left)?head->left:head->right;
+      TreeNode* temp=dummy;
+
+      while(head)
+      {
+
+           if(head->left)
+           {
+            temp->next=head->left;
+            temp=temp->next;
+           }
+           
+           if(head->right)
+           {
+              temp->next=head->right;
+              temp=temp->next;
+           }
+           head=head->next;
+      }
+      head=dummy->next;
+      }
+
+
