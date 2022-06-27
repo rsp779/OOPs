@@ -36,7 +36,13 @@ for(int i=1;i<n;i++
 		    idp=ddp+1;
 	    else ddp=idp+1;
 }
-// given height of tree how many balanced bst can be formed
+// given "HEIGHT" of tree how many balanced bst can be formed
+    
+    dp(h) = dp(h-1)*dp(h-1) + dp(h-1)*dp(h-2) + dp(h-2)*dp(h-1);
+    dp(h) = dp(h-1) [ 2*dp[h-2] + dp(h-1)]
+
+
+    
 int solve(int n)
 {
     vector<int>dp(n+1,0);
@@ -246,7 +252,19 @@ bool solve(string a,string b,string c)
     return dp[n1][n2];
 }
 
-//No of sequence such that product is less than k
+// No of sequence such that product is less than k
+// No. of subsequences such that sum=k
+// dp[i][j]+=dp[i-1][j-arr[i-1]];
+    
+// => similarly for the product less than k 
+//   if (arr[i-1]!=0 && j%arr[i-1]==0 && dp[i-1][j/arr[i-1]])    
+//    dp[i][j]=dp[i-1][j/arr[i-1]];    
+  
+    
+// last row ka sum kardenge    
+    
+    
+
 int solve(vector<int>v,int k)
 {
     int n=v.size();
