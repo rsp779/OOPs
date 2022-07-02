@@ -1,0 +1,64 @@
+//Surrounded region => water flows from all sides so we have to find where the water can be stored(similar)
+
+class Solution {
+public:
+    bool not_possible(int row,int col,int rowsize,int colsize,vector<vector<char>>&board)
+    {
+        if(row<0 || col<0 || row>=rowsize || col>=colsize || board[row][col]!='O' )
+            return true;
+        
+         return false;
+    }
+    void markup(int row,int col,int rowsize,int colsize,vector<vector<char>>&board,vector<int>&dir)
+    {
+        if(not_possible(row,col,rowsize,colsize,board))return;
+        
+        board[row][col]='Y';
+        
+        for(int i=0;i<4;i++){
+            int next_x=row+dir[i];
+            int next_y=col+dir[i+1];
+            
+            markup(next_x,next_y,rowsize,colsize,board,dir);
+        }
+    }
+    void solve(vector<vector<char>>& board) {
+        int rowsize=board.size(),colsize=board[0].size();
+        
+        vector<int>dir={1,0,-1,0,1};
+        
+        for(int row=0;row<rowsize;row++){
+           
+            if(board[row][0]=='O')
+            markup(row,0,rowsize,colsize,board,dir);
+            
+            if(board[row][colsize-1]=='O')
+            markup(row,colsize-1,rowsize,colsize,board,dir);
+            
+        }
+        
+        for(int col=0;col<colsize;col++){
+            
+            if(board[0][col]=='O')
+                markup(0,col,rowsize,colsize,board,dir);
+            
+            if(board[rowsize-1][col]=='O')
+                markup(rowsize-1,col,rowsize,colsize,board,dir);
+            
+        }
+        
+        for(int row=0;row<rowsize;row++){
+            for(int col=0;col<colsize;col++){
+               
+                if(board[row][col]=='O')
+                    board[row][col]='X';
+                
+                if(board[row][col]=='Y')
+                    board[row][col]='O';
+            }
+        }
+    }
+};
+
+
+//
