@@ -61,4 +61,45 @@ public:
 };
 
 
-//
+//Word Break 2 . Given a string s and a dictionary of strings wordDict, 
+add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in any order.
+
+class Solution {
+public:
+    void solve(string &s,string &str,vector<string>&ans,int index,
+               unordered_map<string,int>&mp){
+        
+        if(index==s.size()){
+            str.pop_back();   //this about the last space
+            ans.push_back(str);
+            str.push_back(' ');
+            return ;
+        }
+        
+        for(int i=index;i<s.size();i++){
+            
+            string cur=s.substr(index,i-index+1);
+            if(mp.find(cur)!=mp.end()){
+                str.append(cur);
+                str.push_back(' ');
+                solve(s,str,ans,i+1,mp);
+                str.pop_back();
+               
+               str=str.substr(0,str.size()-(i-index+1)); // most important line for this question
+               
+            }
+        }
+    }
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        vector<string>ans;
+        string str="";
+        unordered_map<string,int>mp;
+        
+        for(int i=0;i<wordDict.size();i++)
+            mp[wordDict[i]]++;
+        
+        solve(s,str,ans,0,mp);
+        
+        return ans;
+    }
+};
