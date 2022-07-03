@@ -134,3 +134,21 @@ public:
         return count;
     }
 };
+
+//Reverse an array by k position
+//=> reverse (0 to that position) then reverse(that position to end ) then reverse the entire vector
+class Solution {
+public:
+    void reverse(vector<int>&nums,int start,int end){
+        while(start<end){
+            swap(nums[start++],nums[end--]);
+        }
+    }
+    void rotate(vector<int>& nums, int k) {
+       
+        k=(k+nums.size())%nums.size();
+        reverse(nums,0,nums.size()-k-1);
+        reverse(nums,nums.size()-k,nums.size()-1);
+        reverse(nums,0,nums.size()-1);
+    }
+};
