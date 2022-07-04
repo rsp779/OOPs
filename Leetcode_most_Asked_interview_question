@@ -267,4 +267,46 @@ If in a 2d matrix arrays are sorted in rowise and column wise
         }
     }
        
-
+// Odd-even join 
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        ListNode* even=new ListNode(0);
+        ListNode* odd=new ListNode(1);
+        ListNode* temp_odd=odd,*temp_even=even,*temp=head;
+        
+        bool flag=false;
+        
+        
+        while(temp){
+            
+            if(flag){
+                temp_even->next=temp;
+                temp_even=temp_even->next;
+                
+            }
+            else {
+                temp_odd->next=temp;
+                temp_odd=temp_odd->next;
+                
+            }
+            flag=!flag;
+            temp=temp->next;  
+        }
+        temp_odd->next=NULL;
+        temp_even->next=NULL;
+        
+        temp_odd->next=even->next;
+        return odd->next;
+    }
+};
