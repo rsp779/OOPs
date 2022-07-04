@@ -152,3 +152,59 @@ public:
         reverse(nums,0,nums.size()-1);
     }
 };
+
+
+// Basic Calculator 2 
+I stored the previous sign and decided what to do on my current number 
+
+ int calculate(string s) {
+        
+        
+        char sign='+';
+        int val=0;
+        stack<int>st;
+        for(int i=0;i<s.size();i++){
+            
+            if(s[i]==' ')continue ;
+            
+            if(s[i]>='0' && s[i]<='9'){
+                
+                while(i<s.size() && (s[i]>='0' && s[i]<='9')){
+                    val=val*10 + (s[i]-'0');
+                    i++;
+                }
+                
+                if(sign=='+' || sign=='-'){
+                    st.push((sign=='+')?val : -val);
+                }
+                
+                else if (sign=='*'){
+                    int top_val=st.top();
+                    st.pop();
+                    st.push(top_val*val);
+                }
+                else {
+                     int top_val=st.top();
+                    st.pop();
+                    st.push(top_val/val);
+                }
+                val=0;
+                i--;
+            }
+            else sign=s[i];
+        }
+        int ans=0;
+        while(!st.empty()){
+            ans+=st.top();
+            st.pop();
+        }
+        return ans;
+}
+
+If in a 2d matrix arrays are sorted in rowise and column wise 
+1. last element of previous row < first element of current row => O(logn)
+2. if not the above case then O(n+m)
+        
+       
+       
+
