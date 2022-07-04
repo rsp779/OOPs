@@ -205,6 +205,42 @@ If in a 2d matrix arrays are sorted in rowise and column wise
 1. last element of previous row < first element of current row => O(logn)
 2. if not the above case then O(n+m)
         
+
+// Given an integer n, return the least number of perfect square numbers that sum to n.
+
+    int numSquares(int n) {
+        
+        
+        
        
+        vector<int>nums;
+        int square_root=sqrt(n);
+        if(square_root * square_root ==  n)return 1;
+        
+        for(int i=1;i<=square_root;i++){
+            nums.push_back(i*i);
+        }
+        int m=nums.size();  //minimum number of coins to make the sum
+        
+        vector<vector<int>>dp(m+1,vector<int>(n+1,INT_MAX-1));
+        dp[0][0]=0;
+        for(int i=1;i<=m;i++){
+           
+            for(int j=0;j<=n;j++){
+                
+                dp[i][j]=dp[i-1][j];
+                
+            
+                
+                 if(j>=nums[i-1]){
+                    dp[i][j]=min(dp[i][j],1+dp[i][j-nums[i-1]]);
+            
+                }
+             
+            }
+        }
+        return dp[m][n];        
+}
+
        
 
