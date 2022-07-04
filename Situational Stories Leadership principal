@@ -1,1 +1,37 @@
+In my first year of college there was subject called computer programming and numerical method where we had a lab assessement in whcih we were given a task to program 
+something out of the box. They had recently briefed us about switch statements and basics of oops concepts and function.
 
+So I had a time span of two days before which I had to complete the task . I was playing tic tac toe game on my computer online and suddenly came up with an idea that 
+whether or not it is possible to create 1v1 game using what I had learned. The curosity was so high that it made go through a lot of gfg articles about and a lot of youtube
+videos to understand how optimally I can use oops concept to reuse the same code so that I need not write same code again and again.
+
+I also studied about cls and goto command that can help me clearing screen and navigate through different code segments easily. I wrote the code in such a way that
+all 9 cells of board were marked with different charecters and a user pressed the charecter the program would replace the charecter with 'X' or 'O' as per user's code
+and the program would clear the screen and then print the updated board. It would also check for a possible winner after each input and if there was a winner it would 
+return the user id and print "Winner Winner".
+
+On the next lab day I showed the code to my lab teacher. He was very happy to see the process I went thought to create this game and asked me to present this to teacher 
+eventually I was asked to submit this as my project for the subject of that semester.
+
+
+#########################################################################################################################################################################
+
+For my project of Code Saver App I wanted to implement forget password feature as users often forget their password and wouldn't be able to login. Since there can be 
+important questions with important notes that they might have saved for future revison , this feature was necessary to secure and saveguard their information.
+
+My task was to find how can I implement this feature that would help me in sending an email from the server to the user's email id smoothly. Also my task was to select 
+the best email cloud service that would help me in email delivery service.
+
+After going through the node js documentation I came to know about nodemailer module that helps in sending the email. After reading about the module I went through some 
+videos I learnt how to implement it . Then I started researching about the various email delivery service provider and came to know about Send Grid, Mail Chimp and Amazon
+SES (Simple Email Service). After a lot of consideration and reasearch on youtube and reading articles I came to conclusin that later two are mostly used for bulk email
+marketing whereas Send Grid is more developer friendly and it thrives more on technical use cases.
+
+The resetpassword was successfully implemented and it has been used extensively from then ownwards to secure the data.
+
+########################################################################################################################################################################
+
+A situation occered in the company(Wobot.AI) that I am Interning where there was a project that had to be tested and finalized within friday. But on Wedensday
+we came to know that two memebers from the data annotation team had an emergency and they had taken a leave.
+
+The project was important and time bound so my manager asked me if I could two jobs parallely.
