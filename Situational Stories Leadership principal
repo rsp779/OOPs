@@ -47,4 +47,26 @@ My manager was very happy with my performance and praised me in our next standup
 
 #######################################################################################################################################################################
 
+Crowd funding is a blockchain project which I developed with my friends to learn about solidity,
+basics of blockchain and also about to learn about how I can use metamask and intergrate it with my 
+it with my blockchain contract. 
 
+There were several data points that we took care of extensively 
+like there should be some minimum contribution below which contributtion was not acceptable , a deadline
+to do donation before which donations had to be made for the specific project. 
+
+There was also a criteria that manager of the contract/fund had to have majority in his  
+favour before he could make withdrawl from the contract.
+
+Then I wrote the code by which I was able to get fund from people that was connected to there meta mask wallet and they
+had to meet the minimum amount criteria and deadline. 
+
+After collection of the fund the manager request was validation and
+if the amount that was requested was gathered then it was checked whether or not 50% of the donors where ready for the transfer of money
+(in this case ethers), the transaction is made . If there is any field that is not met then the ether are transefered back to all the people.
+
+
+Lottery System :
+
+A fixed amount of money was collected from various users and and used a random function that to transfer to it to the user who was randomly chosen as the winner.
+The minimum number of user had to be greater than 3 for the chosing the winner/
