@@ -350,3 +350,49 @@ public:
     }
 };
 
+
+//Shuffle an array 
+=> Given an integer array nums, design an algorithm to randomly shuffle the array. All permutations
+of the array should be equally likely as a result of the shuffling.
+
+class Solution {
+public:
+    vector<int>org;
+    vector<int>v;
+    Solution(vector<int>& nums) {
+        org=nums;
+    }
+    
+    vector<int> reset() {
+        return org;
+    }
+    
+    vector<int> shuffle() {
+        vector<int>ans;
+        v=org;
+        while(v.size()!=0){
+            int index= rand()%v.size();
+            ans.push_back(v[index]);
+            v.erase(v.begin()+index);
+        }
+        return ans;
+    }
+};
+
+//Sum of two numbers without using "+" or "-"
+
+class Solution {
+public:
+  int getSum(int a, int b) {   
+    while(a){
+        int sum = a ^ b;  //=> to find sum (1,1) (1,0) (0,1) (0,0) => this will result to when we take xor
+        
+        a = ((a & b) & 0x7fffffff) << 1;      // for remainder we have to take and operation as
+                                             //remeinder will be only there for (1,1) so we take and shift it one step leftward  
+        // make sure the first bit (sign bit) of carry (a & b) always be zero       
+        b = sum;
+    }
+    return b;
+}
+};
+
