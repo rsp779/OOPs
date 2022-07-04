@@ -242,5 +242,29 @@ If in a 2d matrix arrays are sorted in rowise and column wise
         return dp[m][n];        
 }
 
+
+// Wiggle Sort 2 a<b>c<d>e<f
+
+ void wiggleSort(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int n=nums.size();
+        int maxval=nums[n-1]+1;
+        
+        int start=(n-1)/2,end=n-1;
+       
+        for(int i=0;i<n;i++){
+            
+            if(i%2==0){
+                nums[i]=(nums[start--]%maxval)*maxval+nums[i];
+            }
+            else {
+                nums[i]=(nums[end--]%maxval)*maxval + nums[i];
+            }
+            
+        }
+        for(int i=0;i<n;i++){
+            nums[i]=nums[i]/maxval;
+        }
+    }
        
 
