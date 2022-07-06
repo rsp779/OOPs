@@ -455,4 +455,51 @@ public:
     }
 };
 
+// decode string 
+Input: s = "3[a2[c]]"
+Output: "accaccacc"
 
+class Solution {
+public:
+    string decodeString(string s) {
+        string curstring="";
+        int num=0;
+        
+        stack<string>stringstack;
+        stack<int>intstack;
+        
+    
+        for(int i=0;i<s.size();i++){
+            
+            if(s[i]>='0' && s[i]<='9'){
+                num=num*10+ (s[i]-'0');
+            }
+            
+            else if(s[i]=='['){
+               stringstack.push(curstring);
+                intstack.push(num);
+                curstring="";
+                num=0;
+            }
+            else if(s[i]>='a' && s[i]<='z'){
+                curstring.push_back(s[i]);
+            }
+            else if(s[i]==']')
+            {
+              int freq=intstack.top();
+                
+                string res=curstring;
+                
+                for(int i=1;i<freq;i++)
+                    curstring=curstring+res;
+                
+                curstring=stringstack.top()+curstring;
+                stringstack.pop();
+                intstack.pop();
+                
+            }
+        }
+        return curstring;
+        
+    }
+};
