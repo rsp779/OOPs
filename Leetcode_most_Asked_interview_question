@@ -503,3 +503,12 @@ public:
         
     }
 };
+
+//Maximum of minimum product 1856
+First we find the prefix sum of given array.
+Then we find the number of largest numbers to the left in "array left" and number of largest numbers to the right in "array right" with nums[i] as minimum.
+After finding that, now its become simple, as we know the length of sub array with nums[i] as minimum.
+To get starting index a, a = i-left[i]+1, and ending index b = i+right[i]-1.
+Then process the res, as we know the sum of subarray as we have prefix sum and minimum element is nums[i].
+Update the res by finding maximum of min-product.um products
+
