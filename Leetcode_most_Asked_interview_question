@@ -512,3 +512,4 @@ To get starting index a, a = i-left[i]+1, and ending index b = i+right[i]-1.
 Then process the res, as we know the sum of subarray as we have prefix sum and minimum element is nums[i].
 Update the res by finding maximum of min-product.um products
 
+Amazon Leetcode premium question - file:///C:/Users/Public/Downloads/Problems%20-%20LeetCode%20(07_07_2022%2016_12_28)%20(3).html
