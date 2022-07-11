@@ -27,7 +27,8 @@ videos I learnt how to implement it . Then I started researching about the vario
 SES (Simple Email Service). After a lot of consideration and reasearch on youtube and reading articles I came to conclusin that later two are mostly used for bulk email
 marketing whereas Send Grid is more developer friendly and it thrives more on technical use cases.
 
-The resetpassword was successfully implemented and it has been used extensively from then ownwards to secure the data.
+The resetpassword was successfully implemented and it has been used extensively from then ownwards to secure the data. Later my friends acknowledged this feature as it 
+was easy to use and very helpful.
 
 ########################################################################################################################################################################
 
