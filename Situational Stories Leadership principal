@@ -7,8 +7,8 @@ videos to understand how optimally I can use oops concept to reuse the same code
 
 I also studied about cls and goto command that can help me clearing screen and navigate through different code segments easily. I wrote the code in such a way that
 all 9 cells of board were marked with different charecters and a user pressed the charecter the program would replace the charecter with 'X' or 'O' as per user's code
-and the program would clear the screen and then print the updated board. It would also check for a possible winner after each input and if there was a winner it would 
-return the user id and print "Winner Winner".
+and the program would clear the screen and then print the updated board. This made the user experience very smooth since it would be great if the players enjoyed.
+It would also check for a possible winner after each input and if there was a winner it would return the user id and print "Winner Winner".
 
 On the next lab day I showed the code to my lab teacher. He was very happy to see the process I went thought to create this game and asked me to present this to teacher 
 eventually I was asked to submit this as my project for the subject of that semester.
