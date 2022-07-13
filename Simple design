@@ -1,0 +1,64 @@
+ // Design Browser History 
+ class BrowserHistory {
+public:
+    list<string>lis;
+    list<string> :: iterator itr;
+    BrowserHistory(string homepage) {
+        lis.push_back(homepage);
+        itr=lis.begin();
+    }
+    
+    void visit(string url) {
+        auto del=itr;
+        ++del;
+        lis.erase(del,lis.end());
+        lis.push_back(url);
+        ++itr;
+    }
+    
+    string back(int steps) {
+        while(itr!=lis.begin() && steps--){
+            --itr;
+        }
+        return *itr;
+    }
+    
+    string forward(int steps) {
+        while(itr!= (--lis.end()) && steps--){
+            itr++;
+        }
+        return *itr;
+    }
+};
+
+
+
+//LRU Cache
+
+//LFU Cache
+
+//Tic Tac Toe
+we can keep +1 or -1 for both players and row vector and column vector .. if sum ==n or sum==-(n) 
+for right diagonal the sum has be 
+
+
+int solve(int row,int col,int player){
+
+  int val=(player==1)?1:-1;
+  
+  rowval[row]+=val;
+  if(rowval[row]==n-1 || rowval[col]==-(n-1))return 1;
+  colval[col]+=val;
+  if(colval[col]==n-1  || colval[col]==-(n-1))return 1;
+  
+  if(row==col)diag+=val;
+  if(diag==n-1 || diag==-(n-1))return 1;
+  
+  if(row+col==n-1)antidiag+=val;
+  if(antidiagona==n-1 || antidiagonal==-(n-1))return 1;
+  
+  return 0;
+
+
+}
+
