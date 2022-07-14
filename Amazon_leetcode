@@ -1,0 +1,144 @@
+2281. Sum of Total Strength of Wizards : 
+
+Input: strength = [1,3,1,2]
+Output: 44
+Explanation: The following are all the contiguous groups of wizards:
+- [1] from [1,3,1,2] has a total strength of min([1]) * sum([1]) = 1 * 1 = 1
+- [3] from [1,3,1,2] has a total strength of min([3]) * sum([3]) = 3 * 3 = 9
+- [1] from [1,3,1,2] has a total strength of min([1]) * sum([1]) = 1 * 1 = 1
+- [2] from [1,3,1,2] has a total strength of min([2]) * sum([2]) = 2 * 2 = 4
+- [1,3] from [1,3,1,2] has a total strength of min([1,3]) * sum([1,3]) = 1 * 4 = 4
+- [3,1] from [1,3,1,2] has a total strength of min([3,1]) * sum([3,1]) = 1 * 4 = 4
+- [1,2] from [1,3,1,2] has a total strength of min([1,2]) * sum([1,2]) = 1 * 3 = 3
+- [1,3,1] from [1,3,1,2] has a total strength of min([1,3,1]) * sum([1,3,1]) = 1 * 5 = 5
+- [3,1,2] from [1,3,1,2] has a total strength of min([3,1,2]) * sum([3,1,2]) = 1 * 6 = 6
+- [1,3,1,2] from [1,3,1,2] has a total strength of min([1,3,1,2]) * sum([1,3,1,2]) = 1 * 7 = 7
+The sum of all the total strengths is 1 + 9 + 1 + 4 + 4 + 4 + 3 + 5 + 6 + 7 = 44.
+
+
+int totalStrength(vector<int>& st) {
+    long long MOD = 1'000'000'007;
+    const int N = st.size();
+    // sum of first k elements
+    vector<long long> prefix(N + 1, 0L);
+    for (int i = 0; i < N; ++i) {
+        prefix[i + 1] = (prefix[i] + st[i]) % MOD;
+    }
+    // sum of first k prefix
+    vector<long long> prefix_sum(N + 2, 0L);
+    for (int i = 0; i <= N; ++i) {
+        prefix_sum[i + 1] = (prefix_sum[i] + prefix[i]) % MOD;
+    }
+    
+    // first index on the left < current st
+    vector<int> left(N, -1);
+    // mono increase
+    vector<int> stack;
+    for (int i = 0; i < N; ++i) {
+        while (!stack.empty() && st[stack.back()] >= st[i]) {
+            stack.pop_back();
+        }
+        left[i] = stack.empty() ? -1 : stack.back();
+        stack.push_back(i);
+    }
+    
+    // first index on the right <= current st
+    vector<int> right(N, N);
+    stack.clear();
+    for (int i = N - 1; i >= 0; --i) {
+        while (!stack.empty() && st[stack.back()] > st[i]) {
+            stack.pop_back();
+        }
+        right[i] = stack.empty() ? N : stack.back();
+        stack.push_back(i);
+    }
+    
+    
+    long long res = 0;
+    for (int i = 0; i < N; ++i) {
+        res += ((prefix_sum[right[i] + 1] - prefix_sum[i + 1]) * (i - left[i]) % MOD + MOD * 2 - 
+               (prefix_sum[i + 1] - prefix_sum[left[i] + 1]) * (right[i] - i) % MOD) % MOD * st[i] % MOD;
+        res %= MOD;
+    }
+    return (int) res;
+}
+
+
+
+2272. Substring With Largest Variance
+
+Input: s = "aababbb"
+Output: 3
+Explanation:
+All possible variances along with their respective substrings are listed below:
+- Variance 0 for substrings "a", "aa", "ab", "abab", "aababb", "ba", "b", "bb", and "bbb".
+- Variance 1 for substrings "aab", "aba", "abb", "aabab", "ababb", "aababbb", and "bab".
+- Variance 2 for substrings "aaba", "ababbb", "abbb", and "babb".
+- Variance 3 for substring "babbb".
+Since the largest possible variance is 3, we return it
+
+class Solution {
+public:
+    int largestVariance(string s) {
+        
+    int result = 0;
+    for (char highFreqChar = 'a'; highFreqChar <= 'z'; ++highFreqChar) {
+        for (char lowFreqChar = 'a'; lowFreqChar <= 'z'; ++lowFreqChar) {
+            if (highFreqChar == lowFreqChar) continue;
+            
+           
+           
+            for(int i=1;i<=2;i++){
+                 int highFreq = 0;
+                 int lowFreq = 0;
+            for (const char& ch : s) {
+                if (ch == highFreqChar) ++highFreq;
+                if (ch == lowFreqChar) ++lowFreq;
+                
+                if (lowFreq > 0 && highFreq>0) {
+                    result = max(result, highFreq - lowFreq);
+                  //  cout<<highFreqChar<<" "<<lowFreqChar<<" "<<highFreq<<" "<<lowFreq<<endl;
+                }
+                
+                if (lowFreq > highFreq) {
+                    
+                    lowFreq = 0;
+                    highFreq = 0;
+                    
+                }
+            }
+                reverse(s.begin(),s.end());
+            }
+            
+        }
+    }
+    return result;
+    }
+};
+
+
+2262 : 
+The appeal of a string is the number of distinct characters found in the string.
+
+For example, the appeal of "abbca" is 3 because it has 3 distinct characters: 'a', 'b', and 'c'.
+Given a string s, return the total appeal of all of its substrings.
+
+class Solution {
+public:
+    long long appealSum(string s) {
+        if(s.size()==0)return 0;
+        long long ans=0;
+        long long last=0;
+       vector<int>mp(27,-1);
+        
+        for(int i=0;i<s.size();i++){
+            long long cur=last + (i-mp[s[i]-'a']);
+            mp[s[i]-'a']=i;
+            last=cur;
+            ans+=last;
+        }
+        
+        return ans;
+    }
+};
+
