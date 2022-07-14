@@ -160,3 +160,536 @@ public:
         return (it++)->second;
     }
 };
+
+
+2055. Plates Between Candles
+
+class Solution {
+public:
+    vector<int> platesBetweenCandles(string S, vector<vector<int>>& Q) {
+        int N = S.size(), count = 0, total = 0;
+        vector<int> leftBound(N,0);
+        vector<int> rightBound(N,0);
+        for(int i = 0; i < N; i++) {
+           if (S[i] == '|')
+             count = total;
+           else if (S[i] == '*')
+             total++;
+           rightBound[i] = count;
+        }
+        count = 0;
+        total = 0;
+        for(int i = N - 1; i >= 0; i--) {
+            if (S[i] == '|')
+                count = total;
+            else if (S[i] == '*')
+                total++;
+            leftBound[i] = count;
+        }
+        vector<int> ans;
+        for(int q = 0; q < Q.size(); q++) {
+            int L = Q[q][0];
+            int R = Q[q][1];
+            count = leftBound[L] + rightBound[R] - total;
+            if(count < 0) count = 0;
+            ans.push_back(count);
+        }
+        return ans;
+    }
+};
+
+
+
+1856. Maximum Subarray Min-Product
+
+
+Input: nums = [1,2,3,2]
+Output: 14
+Explanation: The maximum min-product is achieved with the subarray [2,3,2] (minimum value is 2).
+2 * (2+3+2) = 2 * 7 = 14.
+
+
+class Solution {
+public:
+   int maxSumMinProduct(vector<int>& nums) {
+        int n = nums.size();
+        int left[n], right[n];
+        long long int sum[n];
+        sum[0] = nums[0];
+        for(int i=1;i<n;i++){
+            sum[i] = sum[i-1]+nums[i];
+        }
+        stack<pair<int, int> > s1, s2;
+        for (int i = 0; i < n; ++i) {
+            int cnt = 1;
+            while (!s1.empty() && (s1.top().first) > nums[i]) {
+                cnt += s1.top().second;
+                s1.pop();
+            }
+            s1.push({ nums[i], cnt });
+            left[i] = cnt;
+        }
+        for (int i = n - 1; i >= 0; --i) {
+            int cnt = 1;
+            while (!s2.empty() && (s2.top().first) >= nums[i]) {
+                cnt += s2.top().second;
+                s2.pop();
+            }
+
+            s2.push({ nums[i], cnt });
+            right[i] = cnt;
+        }
+        long long int res =0;
+        for(int i=0;i<n;i++){
+            int a = i-left[i]+1;
+            int b = i+right[i]-1;
+            long long int subArraySum;
+            if(a>0)
+                subArraySum = sum[b]-sum[a-1];
+            else
+                subArraySum = sum[b];
+            res = max(res, subArraySum*nums[i]);
+        }
+        return res%1000000007;
+    }
+};
+
+
+1567. Maximum Length of Subarray With Positive Product
+
+Input: nums = [0,1,-2,-3,-4]
+Output: 3
+Explanation: The longest subarray with positive product is [1,-2,-3] which has a product of 6.
+Notice that we cannot include 0 in the subarray since that'll make the product 0 which is not positive.
+
+class Solution {
+public:
+    int getMaxLen(vector<int>& nums) {
+        int ans = 0;
+        int n = nums.size();
+        
+        for(int i=0;i<n;){
+            int s = i; //s is the starting index of subarray
+            int c = 0; //c will keep count of no of negative numbers
+            
+            //ignore zeroes in starting of the array
+            while(s<n and nums[s] == 0) s++;
+            
+            int e = s; //e will be used to traverse the subarray
+            int sn = -1; //index of 1st negative no
+            int ln = -1; //index of last negative no
+            
+            while(e<n and nums[e] != 0){
+                
+				//when we encounter a negative no we increament c
+                if(nums[e] < 0){
+                    c++;
+                    if(sn == -1) sn = e;  //first negative number
+                    ln = e;
+                }
+                
+                e++;
+            }
+            
+            //now e(end) will either point to 0 or n
+            
+            //if no of negatives in subarray are even
+            if(c%2 == 0){
+                ans = max(ans, e-s);
+            }
+            else{
+                
+                //remove first negative no
+                if(sn != -1){
+                    ans = max(ans , e-sn-1);
+                }
+				
+                 //OR  
+                //remove last negative no
+                if(ln != -1){
+                    ans = max(ans , ln-s);
+                }
+            }
+            
+            i = e; //now i will point to the index next to the last element of the current subarray
+        }
+        return ans;
+    }
+};
+
+
+1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+
+Given an array of integers nums and an integer limit, return the size of the longest non-empty subarray such that the absolute 
+difference between any two elements of this subarray is less than or equal to limit.
+
+class Solution {
+public:
+    int longestSubarray(vector<int>& A, int limit) {
+        deque<int> maxd, mind;
+        int i = 0, j;
+        for (j = 0; j < A.size(); ++j) {
+            while (!maxd.empty() && A[j] > maxd.back()) maxd.pop_back();
+            while (!mind.empty() && A[j] < mind.back()) mind.pop_back();
+            maxd.push_back(A[j]);
+            mind.push_back(A[j]);
+            if (maxd.front() - mind.front() > limit) {
+                if (maxd.front() == A[i]) maxd.pop_front();
+                if (mind.front() == A[i]) mind.pop_front();
+                ++i;
+            }
+        }
+        return j - i;
+    }
+};
+
+1291. Sequential Digits
+An integer has sequential digits if and only if each digit in the number is one more than the previous digit.
+Return a sorted list of all the integers in the range [low, high] inclusive that have sequential digits.
+
+class Solution {
+public:
+    int nextsequence (int n){
+        int lastdigit=n%10;
+        return n*10+(lastdigit+1);
+    }
+    vector<int> sequentialDigits(int low, int high) {
+        queue<int>q;
+        for(int i=0;i<=9;i++){
+            q.push(i);
+        }
+        unordered_map<int,int>mp;
+        bool flag=false;
+        vector<int>ans;
+        while(!q.empty()){
+            int n=q.size();
+            for(int i=0;i<n;i++){
+                int cur=q.front();
+                q.pop();
+                if(cur>=low && cur<=high && mp.find(cur)==mp.end()){
+                    ans.push_back(cur);
+                    mp[cur]=1;
+                }
+                if(cur>high){
+                    flag=true;
+                    break;
+                }
+                
+                if(cur%10!=9)
+                q.push(nextsequence(cur));
+            }
+            if(flag)break;
+        }
+        return ans;
+    }
+};
+
+1268. Search Suggestions System
+
+class Solution {
+public:
+  vector<vector<string>> suggestedProducts(vector<string>& A, string searchWord) {
+        auto it = A.begin();
+        sort(it, A.end());
+        vector<vector<string>> res;
+        string cur = "";
+        for (char c : searchWord) {
+            cur += c;
+            vector<string> suggested;
+            int idx = lower_bound(it, A.end(), cur)-it;
+            int finalidx=idx+3;
+            if(finalidx>A.size())finalidx=A.size();
+            
+            for (int i = idx; i<finalidx; i++) {
+                string& s = A[i];
+                if (s.find(cur)) break;
+                suggested.push_back(s);
+            }
+            res.push_back(suggested);
+        }
+        return res;
+    }
+};
+
+1044. Longest Duplicate Substring
+
+
+973. K Closest Points to Origin : we can use max heap that will tc as O(nlogk) .. we can use *QUICK SELECT* to get our answer in O(n)
+
+926. Flip String to Monotone Increasing
+
+A binary string is monotone increasing if it consists of some number of 0's (possibly none), followed by some number of 1's (also possibly none).
+You are given a binary string s. You can flip s[i] changing it from 0 to 1 or from 1 to 0.
+Return the minimum number of flips to make s monotone increasing.
+
+class Solution {
+public:
+    int minFlipsMonoIncr(string s) {
+        int countzero=0,countone=0;
+        
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='0'){
+                countzero++;
+            }
+            else countone++;
+        }
+    
+    int n=s.size();
+    
+    vector<int>left(n,0);
+    vector<int>right(n,0);
+    
+    left[0]=(s[0]=='0')?0:1;
+    right[n-1]=(s[n-1]=='1')?0:1;
+    
+    for(int i=1;i<n;i++){
+        left[i]=left[i-1];
+        if(s[i]=='1'){
+            left[i]+=1;
+        }
+    }
+    
+    for(int i=n-2;i>=0;i--){
+        right[i]=right[i+1];
+        if(s[i]=='0')
+            right[i]+=1;
+    }
+    
+    int ans=left[n-1];
+        ans=min(ans,right[0]);
+    for(int i=1;i<n-1;i++){
+        ans=min(ans,left[i-1]+right[i+1]);
+    }
+    return ans;
+    }
+};
+
+
+907. Sum of Subarray Minimums
+
+Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr.
+Since the answer may be large, return the answer modulo 109 + 7.
+
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        
+        int n = arr.size();
+        
+        vector<int> left(n,-1), right(n,n);
+        // for every i find the Next smaller element to left and right
+        
+        // Left
+        stack<int> st;
+        for(int i=0; i<n; i++)
+        {
+            while(st.size() && arr[i] < arr[st.top()]) st.pop();
+            if(st.size()) left[i] = i - st.top();
+            else left[i] = i+1;
+            st.push(i);
+        }
+        
+        while(st.size()) st.pop();
+        
+        // Right
+        for(int i=n-1; i>=0; i--)
+        {
+            while(st.size() && arr[i] <= arr[st.top()]) st.pop();
+            if(st.size()) right[i] = st.top() - i;
+            else right[i] = n - i;
+            st.push(i);
+        }
+        
+        // for(int i=0; i<n; i++) cout << left[i] << " : " << right[i] << endl;
+        
+        // for each i, contribution is (Left * Right) * Element 
+        
+        int res = 0;
+        int MOD=1e9+7;
+        for(int i=0; i<n; i++)
+        {
+            long long prod = (left[i]*right[i])%MOD;
+            prod = (prod*arr[i])%MOD;
+            res = (res + prod)%MOD;
+        }
+        
+        return res%MOD;
+    }
+};
+
+
+828. Count Unique Characters of All Substrings of a Given String
+
+ int uniqueLetterString(string S) {
+        int index[26][2], res = 0, N = S.length(), mod = pow(10, 9) + 7;
+        memset(index, -1, sizeof(int) * 52);
+        for (int i = 0; i < N; ++i) {
+            int c = S[i] - 'A';
+            res = (res + (i - index[c][1]) * (index[c][1] - index[c][0]) % mod) % mod;
+            index[c][0] = index[c][1];
+            index[c][1] = i;
+        }
+        for (int c = 0; c < 26; ++c)
+            res = (res + (N - index[c][1]) * (index[c][1] - index[c][0]) % mod) % mod;
+        return res;
+    }
+    
+    
+    767. Reorganize String :
+    Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
+    Return any possible rearrangement of s or return "" if not possible.
+    
+    => Priority queue question 
+   
+   
+   
+   735. Asteroid Collision
+   Input: asteroids = [5,10,-5]
+Output: [5,10]
+Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& ast) {
+         int n = ast.size();
+        stack<int> s;
+        for(int i = 0; i < n; i++) {
+            if(ast[i] > 0 || s.empty()) {
+                s.push(ast[i]);
+            }
+            else {
+                while(!s.empty() and s.top() > 0 and s.top() < abs(ast[i])) {
+                    s.pop();
+                }
+                if(!s.empty() and s.top() == abs(ast[i])) {
+                    s.pop();
+                }
+                else {
+                    if(s.empty() || s.top() < 0) {
+                        s.push(ast[i]);
+                    }
+                }
+            }
+        }
+		// finally we are returning the elements which remains in the stack.
+		// we have to return them in reverse order.
+        vector<int> res(s.size());
+        for(int i = (int)s.size() - 1; i >= 0; i--) {
+            res[i] = s.top();
+            s.pop();
+        }
+        return res;
+    }
+};
+
+
+
+273 : Interger to English 
+
+class Solution {
+public:
+    string numberToWords(int num) {
+        string w1[] = {"", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine"};
+        string w2[] = {" Ten", " Eleven", " Twelve", " Thirteen", " Fourteen", " Fifteen", " Sixteen", " Seventeen", " Eighteen", " Nineteen" };
+        string w3[] = {"",  "",  " Twen", " Thir", " For", " Fif", " Six", " Seven", " Eigh", " Nine" };
+        string e[] = {"", " Thousand", " Million", " Billion"};
+        
+        string s;
+        int k=0;
+        while(num) {
+            string sub;
+            int s4=num%1000, s3=s4/100, s2=s4%100;
+            if(s4) s.insert(0, e[k]);
+            if(s3) sub += w1[s3] + " Hundred";
+            if(s2) sub += s2<20? (s2<10? w1[s2%10]: w2[s2%10]): w3[s2/10%10]+"ty"+w1[s2%10];
+            s.insert(0, sub);
+            num /= 1000;
+            k++;
+        }
+        
+        return s.size()? 
+            string(s.begin()+1, s.end())
+            : "Zero";
+    }
+};
+
+
+140 : Word Break 2 
+Input: s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]
+Output: ["cats and dog","cat sand dog"]
+
+
+class Solution {
+public:
+    void solve(string &s,string &str,vector<string>&ans,int index,
+               unordered_map<string,int>&mp){
+        
+        if(index==s.size()){
+            str.pop_back();
+            ans.push_back(str);
+            str.push_back(' ');
+            return ;
+        }
+        
+        for(int i=index;i<s.size();i++){
+            
+            string cur=s.substr(index,i-index+1);
+            if(mp.find(cur)!=mp.end()){
+                str.append(cur);
+                str.push_back(' ');
+                solve(s,str,ans,i+1,mp);
+                str.pop_back();
+               
+               str=str.substr(0,str.size()-(i-index+1)); // most important line for this question
+               
+            }
+        }
+    }
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        vector<string>ans;
+        string str="";
+        unordered_map<string,int>mp;
+        
+        for(int i=0;i<wordDict.size();i++)
+            mp[wordDict[i]]++;
+        
+        solve(s,str,ans,0,mp);
+        
+        return ans;
+    }
+};
+
+
+
+472. Concatenated Words
+
+Given an array of strings words (without duplicates), return all the concatenated words in the given list of words.
+A concatenated word is defined as a string that is comprised entirely of at least two shorter words in the given array.
+
+Input: words = ["cat","cats","catsdogcats","dog","dogcatsdog","hippopotamuses","rat","ratcatdogcat"]
+Output: ["catsdogcats","dogcatsdog","ratcatdogcat"]
+Explanation: "catsdogcats" can be concatenated by "cats", "dog" and "cats"; 
+"dogcatsdog" can be concatenated by "dog", "cats" and "dog"; 
+"ratcatdogcat" can be concatenated by "rat", "cat", "dog" and "cat".
+
+
+ vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        unordered_set<string> s(words.begin(), words.end());
+        vector<string> res;
+        for (auto w : words) {
+            int n = w.size();
+            vector<int> dp(n+1);
+            dp[0] = 1;
+            for (int i = 0; i < n; i++) {
+                if (dp[i] == 0) continue;
+                for (int j = i+1; j <= n; j++) {
+                    if (j - i < n && s.count(w.substr(i, j-i))) dp[j] = 1;
+                }
+                if (dp[n]) { res.push_back(w); break; }
+            }
+        }
+        return res;
+    }
+    
+    
+
