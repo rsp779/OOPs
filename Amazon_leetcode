@@ -123,6 +123,8 @@ The appeal of a string is the number of distinct characters found in the string.
 For example, the appeal of "abbca" is 3 because it has 3 distinct characters: 'a', 'b', and 'c'.
 Given a string s, return the total appeal of all of its substrings.
 
+F(i) = F(i-1) + (i-last_appearing_of_current_char);
+
 class Solution {
 public:
     long long appealSum(string s) {
@@ -142,3 +144,19 @@ public:
     }
 };
 
+
+2102. Sequentially Ordinal Rank Tracker : Check_youtube_for_priority_Queue_Solution
+
+class SORTracker {
+public:
+    set<pair<int, string>> s;
+    set<pair<int, string>>::iterator it = end(s);    
+    void add(string name, int score) {
+        auto it1 = s.insert({-score, name}).first;
+        if (it == end(s) || *it1 < *it)
+            --it;
+    }
+    string get() {
+        return (it++)->second;
+    }
+};
